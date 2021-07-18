@@ -7,15 +7,15 @@ import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.google.android.gms.location.LocationRequest
-import com.google.android.gms.location.LocationServices
-import io.github.crow_misia.location_coroutines.requestLocationUpdates
+import io.github.crow_misia.location_coroutines.FusedLocationCoroutine
+import io.github.crow_misia.location_coroutines.getLocationUpdates
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 
 class MainViewModel(application: Application) : AndroidViewModel(application) {
     private var locationFlow: SharedFlow<Location>? = null
-    private val locationProviderClient = LocationServices.getFusedLocationProviderClient(application)
+    private val locationProviderClient = FusedLocationCoroutine.from(application)
 
     val textView = MutableLiveData("")
 
@@ -24,7 +24,7 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
     fun onClick() {
         viewModelScope.launch {
             val flow = locationFlow ?: run {
-                locationProviderClient.requestLocationUpdates {
+                locationProviderClient.getLocationUpdates {
                     interval = 1000
                     priority = LocationRequest.PRIORITY_HIGH_ACCURACY
                 }.shareIn(this, SharingStarted.WhileSubscribed(), 1)

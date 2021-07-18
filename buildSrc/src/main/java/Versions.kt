@@ -8,7 +8,7 @@ object Versions {
     const val compileSdk = 30
     const val minSdk = 14
 
-    const val locationCoroutine = "0.0.1"
+    const val locationCoroutine = "0.1.0"
 
     const val kotlinxCoroutines = "1.5.1"
     const val playServicesLocation = "18.0.0"
