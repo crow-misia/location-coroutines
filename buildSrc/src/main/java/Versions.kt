@@ -1,5 +1,5 @@
 object Versions {
-    const val kotlin = "1.5.20"
+    const val kotlin = "1.5.21"
     const val gradlePlugin = "4.2.2"
     const val dokkaPlugin = "1.5.0"
     const val detektPlugin = "1.17.1"
