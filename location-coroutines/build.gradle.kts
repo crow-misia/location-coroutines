@@ -15,31 +15,23 @@ group = Maven.groupId
 version = Versions.locationCoroutine
 
 android {
-    buildToolsVersion(Versions.buildTools)
-    compileSdkVersion(Versions.compileSdk)
+    buildToolsVersion = Versions.buildTools
+    compileSdk = Versions.compileSdk
 
     defaultConfig {
-        minSdkVersion(Versions.minSdk)
+        minSdk = Versions.minSdk
         consumerProguardFiles("consumer-proguard-rules.pro")
     }
 
-    lintOptions {
+    lint {
         textReport = true
         textOutput("stdout")
+        isCheckDependencies = true
     }
 
     libraryVariants.all {
         generateBuildConfigProvider?.configure {
             enabled = false
-        }
-    }
-
-    buildTypes {
-        getByName("debug") {
-            isDebuggable = true
-        }
-        getByName("release") {
-            isDebuggable = false
         }
     }
 
