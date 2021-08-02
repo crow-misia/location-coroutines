@@ -3,7 +3,7 @@ package io.github.crow_misia.location_coroutines
 import android.Manifest
 import android.app.PendingIntent
 import android.location.Location
-import android.os.Looper
+import android.os.HandlerThread
 import androidx.annotation.RequiresPermission
 import com.google.android.gms.location.*
 import com.google.android.gms.tasks.CancellationTokenSource
@@ -44,7 +44,9 @@ internal class FusedLocationCoroutineImpl(
     @ExperimentalCoroutinesApi
     @RequiresPermission(anyOf = [Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.ACCESS_FINE_LOCATION])
     override fun getLocationUpdates(request: LocationRequest): Flow<Location> = callbackFlow {
-        val looper = Looper.myLooper() ?: error("Can't create handler inside thread that has not called Looper.prepare()")
+        val thread = HandlerThread("fusedLocationCoroutineImpl")
+        thread.start()
+        val looper = thread.looper
 
         val callback = object : LocationCallback() {
             override fun onLocationResult(result: LocationResult) {
@@ -57,6 +59,9 @@ internal class FusedLocationCoroutineImpl(
         locationProvider.value.requestLocationUpdates(request, callback, looper).await()
         awaitClose {
             locationProvider.value.removeLocationUpdates(callback)
+                .addOnCompleteListener {
+                    thread.quit()
+                }
         }
     }
 

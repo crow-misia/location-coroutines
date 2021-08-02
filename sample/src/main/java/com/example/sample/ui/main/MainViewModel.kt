@@ -9,6 +9,7 @@ import androidx.lifecycle.viewModelScope
 import com.google.android.gms.location.LocationRequest
 import io.github.crow_misia.location_coroutines.FusedLocationCoroutine
 import io.github.crow_misia.location_coroutines.getLocationUpdates
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
@@ -22,10 +23,10 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
     @OptIn(ExperimentalCoroutinesApi::class)
     @SuppressLint("MissingPermission")
     fun onClick() {
-        viewModelScope.launch {
+        viewModelScope.launch(Dispatchers.Default) {
             val flow = locationFlow ?: run {
                 locationProviderClient.getLocationUpdates {
-                    interval = 1000
+                    interval = 1000L
                     priority = LocationRequest.PRIORITY_HIGH_ACCURACY
                 }.shareIn(this, SharingStarted.WhileSubscribed(), 1)
                  .also {
