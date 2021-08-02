@@ -72,7 +72,9 @@ suspend inline fun FusedLocationCoroutine.checkLocationSettings(request: Locatio
     return checkLocationSettings { addLocationRequest(request) }
 }
 
-suspend inline fun FusedLocationCoroutine.checkLocationSettings(builder: LocationSettingsRequest.Builder.() -> Unit): LocationSettingsResponse {
+suspend inline fun FusedLocationCoroutine.checkLocationSettings(
+    builder: LocationSettingsRequest.Builder.() -> Unit,
+): LocationSettingsResponse {
     return checkLocationSettings(LocationSettingsRequest.Builder().also { builder(it) }.build())
 }
 

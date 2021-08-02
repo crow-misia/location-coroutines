@@ -33,7 +33,8 @@ internal class FusedLocationCoroutineImpl(
     override suspend fun getCurrentLocation(priority: Int): Location? {
         val cancellationTokenSource = CancellationTokenSource()
 
-        return locationProvider.value.getCurrentLocation(priority, cancellationTokenSource.token).await(cancellationTokenSource)
+        return locationProvider.value.getCurrentLocation(priority, cancellationTokenSource.token)
+            .await(cancellationTokenSource)
     }
 
     @RequiresPermission(anyOf = [Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.ACCESS_FINE_LOCATION])

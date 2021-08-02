@@ -30,7 +30,7 @@ repository {
 
 ## License
 
-```w
+```
 Copyright 2021, Zenichi Amano.
 
 Licensed under the Apache License, Version 2.0 (the "License");
