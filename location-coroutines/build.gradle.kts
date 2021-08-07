@@ -5,21 +5,35 @@ import java.net.URI
 plugins {
     id("com.android.library")
     kotlin("android")
-    id("io.gitlab.arturbosch.detekt") version Versions.detektPlugin
+    id("io.gitlab.arturbosch.detekt")
     id("org.jetbrains.dokka")
     id("signing")
     id("maven-publish")
 }
 
+object Maven {
+    const val groupId = "io.github.crow-misia.location-coroutines"
+    const val artifactId = "location-coroutines"
+    const val name = "location-coroutines"
+    const val version = "0.2.0"
+    const val desc = "Coroutines function for FusesLocationProviderClient"
+    const val siteUrl = "https://github.com/crow-misia/location-coroutines"
+    const val gitUrl = "https://github.com/crow-misia/location-coroutines.git"
+    const val licenseName = "The Apache Software License, Version 2.0"
+    const val licenseUrl = "http://www.apache.org/licenses/LICENSE-2.0.txt"
+    const val licenseDist = "repo"
+    val licenses = arrayOf("Apache-2.0")
+}
+
 group = Maven.groupId
-version = Versions.locationCoroutine
+version = Maven.version
 
 android {
-    buildToolsVersion = Versions.buildTools
-    compileSdk = Versions.compileSdk
+    buildToolsVersion = "31.0.0"
+    compileSdk = 31
 
     defaultConfig {
-        minSdk = Versions.minSdk
+        minSdk = 14
         consumerProguardFiles("consumer-proguard-rules.pro")
     }
 
@@ -52,11 +66,11 @@ android {
 
 dependencies {
     api(kotlin("stdlib-jdk8"))
-    api(platform(Deps.kotlinxCoroutinesBom))
-    api(Deps.kotlinxCoroutines)
-    api(Deps.kotlinxCoroutinesAndroid)
-    api(Deps.kotlinxCoroutinesPlayServices)
-    api(Deps.playServiceLocation)
+    api(platform("org.jetbrains.kotlinx:kotlinx-coroutines-bom:_"))
+    api("org.jetbrains.kotlinx:kotlinx-coroutines-core")
+    api("org.jetbrains.kotlinx:kotlinx-coroutines-android")
+    api("org.jetbrains.kotlinx:kotlinx-coroutines-play-services")
+    api("com.google.android.gms:play-services-location:_")
 }
 
 val sourcesJar by tasks.creating(Jar::class) {
@@ -71,7 +85,7 @@ val customDokkaTask by tasks.creating(DokkaTask::class) {
         noAndroidSdkLink.set(false)
     }
     dependencies {
-        plugins("org.jetbrains.dokka:javadoc-plugin:${Versions.dokkaPlugin}")
+        plugins("org.jetbrains.dokka:javadoc-plugin:_")
     }
     inputs.dir("src/main/java")
     outputDirectory.set(buildDir.resolve("javadoc"))
@@ -93,7 +107,6 @@ afterEvaluate {
 
                 groupId = Maven.groupId
                 artifactId = Maven.artifactId
-                version = Versions.locationCoroutine
 
                 println("""
                     |Creating maven publication
@@ -114,7 +127,7 @@ afterEvaluate {
                         val scmUrl = "scm:git:${Maven.gitUrl}"
                         connection.set(scmUrl)
                         developerConnection.set(scmUrl)
-                        url.set(this@pom.url)
+                        url.set(Maven.gitUrl)
                         tag.set("HEAD")
                     }
 
@@ -142,7 +155,7 @@ afterEvaluate {
             maven {
                 val releasesRepoUrl = URI("https://oss.sonatype.org/service/local/staging/deploy/maven2")
                 val snapshotsRepoUrl = URI("https://oss.sonatype.org/content/repositories/snapshots")
-                url = if (Versions.locationCoroutine.endsWith("SNAPSHOT")) snapshotsRepoUrl else releasesRepoUrl
+                url = if (Maven.version.endsWith("SNAPSHOT")) snapshotsRepoUrl else releasesRepoUrl
                 val sonatypeUsername: String? by project
                 val sonatypePassword: String? by project
                 credentials {
