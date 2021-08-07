@@ -1,4 +1,3 @@
-import com.android.build.gradle.*
 import org.jetbrains.dokka.gradle.DokkaTask
 import java.net.URI
 
@@ -65,12 +64,11 @@ android {
 }
 
 dependencies {
-    api(kotlin("stdlib-jdk8"))
-    api(platform("org.jetbrains.kotlinx:kotlinx-coroutines-bom:_"))
-    api("org.jetbrains.kotlinx:kotlinx-coroutines-core")
-    api("org.jetbrains.kotlinx:kotlinx-coroutines-android")
-    api("org.jetbrains.kotlinx:kotlinx-coroutines-play-services")
-    api("com.google.android.gms:play-services-location:_")
+    api(Kotlin.stdlib)
+    api(KotlinX.coroutines.core)
+    api(KotlinX.coroutines.android)
+    api(KotlinX.coroutines.playServices)
+    api(Google.android.playServices.location)
 }
 
 val sourcesJar by tasks.creating(Jar::class) {
