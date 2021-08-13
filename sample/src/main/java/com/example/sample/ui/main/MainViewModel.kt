@@ -11,6 +11,8 @@ import io.github.crow_misia.location_coroutines.FusedLocationCoroutine
 import io.github.crow_misia.location_coroutines.getLocationUpdates
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.channels.BufferOverflow
+import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 
@@ -20,9 +22,16 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
 
     val textView = MutableLiveData("")
 
+    private val onClickEventChannel = Channel<Unit>(onBufferOverflow = BufferOverflow.DROP_OLDEST)
+    val onClickEvent = onClickEventChannel.receiveAsFlow()
+
+    fun onClick() {
+        onClickEventChannel.trySend(Unit)
+    }
+
     @OptIn(ExperimentalCoroutinesApi::class)
     @SuppressLint("MissingPermission")
-    fun onClick() {
+    fun startFetchLocation() {
         viewModelScope.launch(Dispatchers.Default) {
             val flow = locationFlow ?: run {
                 locationProviderClient.getLocationUpdates {

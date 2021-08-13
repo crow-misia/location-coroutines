@@ -1,7 +1,6 @@
 package com.example.sample.ui.main
 
 import android.Manifest
-import android.app.Application
 import androidx.lifecycle.ViewModelProvider
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -11,8 +10,10 @@ import android.widget.Toast
 import androidx.annotation.StringRes
 import androidx.appcompat.app.AlertDialog
 import androidx.lifecycle.get
+import androidx.lifecycle.lifecycleScope
 import com.example.sample.R
 import com.example.sample.databinding.MainFragmentBinding
+import kotlinx.coroutines.flow.collect
 import permissions.dispatcher.*
 
 @RuntimePermissions
@@ -28,33 +29,42 @@ class MainFragment : androidx.fragment.app.Fragment() {
         }.root
     }
 
-    override fun onResume() {
-        super.onResume()
-        checkPermissionWithPermissionCheck()
-    }
-
     private fun bindingToViewModel(binding: MainFragmentBinding) {
         viewModel = ViewModelProvider(this, ViewModelProvider.AndroidViewModelFactory.getInstance(requireActivity().application)).get()
         binding.viewModel = viewModel
         binding.lifecycleOwner = this
+
+        lifecycleScope.launchWhenResumed {
+            viewModel.onClickEvent.collect { checkPermissionWithPermissionCheck() }
+        }
+    }
+
+    override fun onRequestPermissionsResult(
+        requestCode: Int,
+        permissions: Array<out String>,
+        grantResults: IntArray
+    ) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+        onRequestPermissionsResult(requestCode, grantResults)
     }
 
     @NeedsPermission(Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.ACCESS_FINE_LOCATION)
     fun checkPermission() {
+        viewModel.startFetchLocation()
     }
 
     @OnShowRationale(Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.ACCESS_FINE_LOCATION)
-    fun showRationaleForLocation(request: PermissionRequest) {
+    fun onLocationShowRationale(request: PermissionRequest) {
         showRationaleDialog(R.string.permission_location_rationale, request)
     }
 
     @OnPermissionDenied(Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.ACCESS_FINE_LOCATION)
-    fun onCameraDenied() {
+    fun onLocationDenied() {
         Toast.makeText(requireActivity(), R.string.permission_location_denied, Toast.LENGTH_SHORT).show()
     }
 
     @OnNeverAskAgain(Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.ACCESS_FINE_LOCATION)
-    fun onCameraNeverAskAgain() {
+    fun onLocationNeverAskAgain() {
         Toast.makeText(requireActivity(), R.string.permission_location_never_ask_again, Toast.LENGTH_SHORT).show()
     }
 
