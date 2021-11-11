@@ -44,12 +44,14 @@ interface FusedLocationCoroutine {
 
     suspend fun isLocationAvailable(request: LocationSettingsRequest): Boolean
 
+    @ExperimentalCoroutinesApi
     @RequiresPermission(anyOf = [Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.ACCESS_FINE_LOCATION])
     suspend fun getCurrentLocation(priority: Int): Location?
 
     @RequiresPermission(anyOf = [Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.ACCESS_FINE_LOCATION])
     suspend fun getLastLocation(): Location?
 
+    @ExperimentalCoroutinesApi
     @RequiresPermission(anyOf = [Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.ACCESS_FINE_LOCATION])
     fun getLocationUpdates(request: LocationRequest): Flow<Location>
 
@@ -78,7 +80,6 @@ suspend inline fun FusedLocationCoroutine.checkLocationSettings(
     return checkLocationSettings(LocationSettingsRequest.Builder().also { builder(it) }.build())
 }
 
-@ExperimentalCoroutinesApi
 @RequiresPermission(anyOf = [Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.ACCESS_FINE_LOCATION])
 inline fun FusedLocationCoroutine.getLocationUpdates(crossinline block: LocationRequest.() -> Unit): Flow<Location> {
     return getLocationUpdates(LocationRequest.create().apply(block))

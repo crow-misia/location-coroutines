@@ -29,7 +29,6 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
         onClickEventChannel.trySend(Unit)
     }
 
-    @OptIn(ExperimentalCoroutinesApi::class)
     @SuppressLint("MissingPermission")
     fun startFetchLocation() {
         viewModelScope.launch(Dispatchers.Default) {

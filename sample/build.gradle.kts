@@ -29,12 +29,12 @@ android {
         }
     }
     compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_1_8
-        targetCompatibility = JavaVersion.VERSION_1_8
+        sourceCompatibility = JavaVersion.VERSION_11
+        targetCompatibility = JavaVersion.VERSION_11
     }
     kotlinOptions {
-        freeCompilerArgs = listOf("-Xopt-in=kotlin.RequiresOptIn")
-        jvmTarget = "1.8"
+        freeCompilerArgs = listOf("-Xjsr305=strict")
+        jvmTarget = "11"
         apiVersion = "1.5"
         languageVersion = "1.5"
     }
@@ -44,10 +44,13 @@ dependencies {
     implementation(project(":location-coroutines"))
 
     implementation(Kotlin.stdlib)
+    implementation(AndroidX.activityKtx)
     implementation(AndroidX.appCompat)
     implementation(AndroidX.constraintLayout)
+    implementation(AndroidX.fragmentKtx)
     implementation(AndroidX.lifecycle.liveDataKtx)
     implementation(AndroidX.lifecycle.viewModelKtx)
+    implementation(JakeWharton.timber)
     implementation("com.github.permissions-dispatcher:permissionsdispatcher:_")
     kapt("com.github.permissions-dispatcher:permissionsdispatcher-processor:_")
     testImplementation(Testing.junit4)

@@ -18,7 +18,6 @@ internal class FusedLocationCoroutineImpl(
     private val settings: Lazy<SettingsClient>,
     private val geofencing: Lazy<GeofencingClient>,
 ) : FusedLocationCoroutine {
-    @ExperimentalCoroutinesApi
     override suspend fun checkLocationSettings(request: LocationSettingsRequest): LocationSettingsResponse {
         return settings.value.checkLocationSettings(request).await()
     }
