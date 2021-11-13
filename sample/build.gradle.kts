@@ -1,3 +1,5 @@
+import de.fayard.refreshVersions.core.versionFor
+
 plugins {
     id("com.android.application")
     id("kotlin-android")
@@ -5,7 +7,6 @@ plugins {
 }
 
 android {
-    buildToolsVersion = "31.0.0"
     compileSdk = 31
 
     defaultConfig {
@@ -16,10 +17,6 @@ android {
         versionName = "1.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
-    }
-
-    buildFeatures {
-        dataBinding = true
     }
 
     buildTypes {
@@ -33,10 +30,21 @@ android {
         targetCompatibility = JavaVersion.VERSION_11
     }
     kotlinOptions {
-        freeCompilerArgs = listOf("-Xjsr305=strict")
+        freeCompilerArgs = listOf("-Xjsr305=strict", "-Xopt-in=kotlin.RequiresOptIn")
         jvmTarget = "11"
         apiVersion = "1.5"
         languageVersion = "1.5"
+    }
+    buildFeatures {
+        compose = true
+    }
+    composeOptions {
+        kotlinCompilerExtensionVersion = versionFor(AndroidX.compose.compiler)
+    }
+    packagingOptions {
+        resources {
+            excludes.add("/META-INF/{AL2.0,LGPL2.1}")
+        }
     }
 }
 
@@ -44,16 +52,28 @@ dependencies {
     implementation(project(":location-coroutines"))
 
     implementation(Kotlin.stdlib)
-    implementation(AndroidX.activityKtx)
+
+    implementation(AndroidX.activity.compose)
     implementation(AndroidX.appCompat)
-    implementation(AndroidX.constraintLayout)
-    implementation(AndroidX.fragmentKtx)
-    implementation(AndroidX.lifecycle.liveDataKtx)
-    implementation(AndroidX.lifecycle.viewModelKtx)
+    implementation(AndroidX.core.ktx)
+
+    implementation(AndroidX.compose.ui)
+    implementation(AndroidX.compose.ui.toolingPreview)
+    implementation(AndroidX.compose.material)
+    implementation(AndroidX.compose.runtime.liveData)
+    implementation(AndroidX.lifecycle.runtimeKtx)
+    implementation(AndroidX.lifecycle.viewModelCompose)
+    implementation(AndroidX.navigation.compose)
+    implementation(Google.android.material)
+
     implementation(JakeWharton.timber)
-    implementation("com.github.permissions-dispatcher:permissionsdispatcher:_")
-    kapt("com.github.permissions-dispatcher:permissionsdispatcher-processor:_")
+
+    implementation("com.google.accompanist:accompanist-permissions:_")
+
     testImplementation(Testing.junit4)
     androidTestImplementation(AndroidX.test.ext.junitKtx)
     androidTestImplementation(AndroidX.test.espresso.core)
+    androidTestImplementation(AndroidX.compose.ui.testJunit4)
+
+    debugImplementation(AndroidX.compose.ui.tooling)
 }

@@ -174,17 +174,17 @@ detekt {
     config = files("$rootDir/config/detekt.yml")
 
     reports {
-        html.enabled = true
-        xml.enabled = true
-        txt.enabled = true
-        sarif.enabled = true
+        html.required.set(true)
+        xml.required.set(true)
+        txt.required.set(true)
+        sarif.required.set(true)
     }
 }
 
 tasks {
     withType<io.gitlab.arturbosch.detekt.Detekt>().configureEach {
         // Target version of the generated JVM bytecode. It is used for type resolution.
-        jvmTarget = "1.8"
+        jvmTarget = "11"
     }
     withType<Test> {
         useJUnitPlatform()
