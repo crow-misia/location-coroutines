@@ -27,8 +27,8 @@ group = Maven.groupId
 version = Maven.version
 
 android {
-    buildToolsVersion = "31.0.0"
-    compileSdk = 31
+    buildToolsVersion = "32.0.0"
+    compileSdk = 32
 
     defaultConfig {
         minSdk = 14
@@ -37,8 +37,7 @@ android {
 
     lint {
         textReport = true
-        textOutput("stdout")
-        isCheckDependencies = true
+        checkDependencies = true
     }
 
     libraryVariants.all {

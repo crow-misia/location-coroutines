@@ -7,7 +7,8 @@ plugins {
 }
 
 android {
-    compileSdk = 31
+    buildToolsVersion = "32.0.0"
+    compileSdk = 32
 
     defaultConfig {
         applicationId = "com.example.sample"
