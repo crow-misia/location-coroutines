@@ -3,7 +3,7 @@ import java.net.URI
 
 plugins {
     id("com.android.library")
-    kotlin("android")
+    id("kotlin-android")
     id("io.gitlab.arturbosch.detekt")
     id("org.jetbrains.dokka")
     id("signing")
@@ -14,7 +14,7 @@ object Maven {
     const val groupId = "io.github.crow-misia.location-coroutines"
     const val artifactId = "location-coroutines"
     const val name = "location-coroutines"
-    const val version = "0.4.0"
+    const val version = "0.5.0"
     const val desc = "Coroutines function for FusesLocationProviderClient"
     const val siteUrl = "https://github.com/crow-misia/location-coroutines"
     const val gitUrl = "https://github.com/crow-misia/location-coroutines.git"
@@ -55,8 +55,8 @@ android {
         kotlinOptions {
             freeCompilerArgs = listOf("-Xjsr305=strict")
             jvmTarget = "11"
-            apiVersion = "1.5"
-            languageVersion = "1.5"
+            apiVersion = "1.6"
+            languageVersion = "1.6"
         }
     }
 }

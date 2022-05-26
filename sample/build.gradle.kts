@@ -40,7 +40,7 @@ android {
         compose = true
     }
     composeOptions {
-        kotlinCompilerExtensionVersion = versionFor(AndroidX.compose.compiler)
+        kotlinCompilerExtensionVersion = versionFor(AndroidX.compose.runtime)
     }
     packagingOptions {
         resources {

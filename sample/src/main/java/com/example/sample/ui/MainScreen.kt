@@ -8,15 +8,11 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.material.Button
 import androidx.compose.material.Text
 import androidx.compose.runtime.*
-import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
-import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.dp
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import com.google.accompanist.permissions.rememberMultiplePermissionsState
-import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 
 @Composable
@@ -61,12 +57,15 @@ fun MainContent(
     ))
 
     when {
-        permissionState.permissionRequested && permissionState.allPermissionsGranted -> onClick()
-        permissionState.shouldShowRationale || !permissionState.permissionRequested -> {
+        permissionState.allPermissionsGranted -> onClick()
+        permissionState.shouldShowRationale -> {
+            Column {
+                Text("permission is required")
+            }
         }
         else -> {
             Column {
-                Text("permission denied")
+                Text("permission denied:" + permissionState.revokedPermissions.size)
             }
             Button(onClick = navigateToSettingsScreen) {
                 Text("Open Settings")
