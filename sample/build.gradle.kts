@@ -33,8 +33,8 @@ android {
     kotlinOptions {
         freeCompilerArgs = listOf("-Xjsr305=strict", "-Xopt-in=kotlin.RequiresOptIn")
         jvmTarget = "11"
-        apiVersion = "1.5"
-        languageVersion = "1.5"
+        apiVersion = "1.6"
+        languageVersion = "1.6"
     }
     buildFeatures {
         compose = true
@@ -72,7 +72,7 @@ dependencies {
     implementation("com.google.accompanist:accompanist-permissions:_")
 
     testImplementation(Testing.junit4)
-    androidTestImplementation(AndroidX.test.ext.junitKtx)
+    androidTestImplementation(AndroidX.test.ext.junit.ktx)
     androidTestImplementation(AndroidX.test.espresso.core)
     androidTestImplementation(AndroidX.compose.ui.testJunit4)
 
