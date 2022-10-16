@@ -29,16 +29,20 @@ internal class FusedLocationCoroutineImpl(
 
     @ExperimentalCoroutinesApi
     @RequiresPermission(anyOf = [Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.ACCESS_FINE_LOCATION])
-    override suspend fun getCurrentLocation(priority: Int): Location? {
+    override suspend fun getCurrentLocation(request: CurrentLocationRequest): Location? {
         val cancellationTokenSource = CancellationTokenSource()
 
-        return locationProvider.value.getCurrentLocation(priority, cancellationTokenSource.token)
+        return locationProvider.value.getCurrentLocation(request, cancellationTokenSource.token)
             .await(cancellationTokenSource)
     }
 
     @RequiresPermission(anyOf = [Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.ACCESS_FINE_LOCATION])
-    override suspend fun getLastLocation(): Location? {
-        return locationProvider.value.lastLocation.await()
+    override suspend fun getLastLocation(request: LastLocationRequest?): Location? {
+        return request?.let {
+            locationProvider.value.getLastLocation(it).await()
+        } ?: run {
+            locationProvider.value.lastLocation.await()
+        }
     }
 
     @ExperimentalCoroutinesApi

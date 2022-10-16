@@ -4,6 +4,7 @@ import java.net.URI
 plugins {
     id("com.android.library")
     id("kotlin-android")
+    id("com.google.android.gms.strict-version-matcher-plugin")
     id("io.gitlab.arturbosch.detekt")
     id("org.jetbrains.dokka")
     id("signing")
@@ -14,7 +15,7 @@ object Maven {
     const val groupId = "io.github.crow-misia.location-coroutines"
     const val artifactId = "location-coroutines"
     const val name = "location-coroutines"
-    const val version = "0.5.0"
+    const val version = "0.6.0"
     const val desc = "Coroutines function for FusesLocationProviderClient"
     const val siteUrl = "https://github.com/crow-misia/location-coroutines"
     const val gitUrl = "https://github.com/crow-misia/location-coroutines.git"
@@ -27,10 +28,11 @@ group = Maven.groupId
 version = Maven.version
 
 android {
-    buildToolsVersion = "32.0.0"
-    compileSdk = 32
+    buildToolsVersion = "33.0.0"
+    compileSdk = 33
 
     defaultConfig {
+        namespace = "io.github.crow_misia.location_coroutines"
         minSdk = 14
         consumerProguardFiles("consumer-proguard-rules.pro")
     }
@@ -38,12 +40,6 @@ android {
     lint {
         textReport = true
         checkDependencies = true
-    }
-
-    libraryVariants.all {
-        generateBuildConfigProvider?.configure {
-            enabled = false
-        }
     }
 
     compileOptions {
@@ -55,8 +51,8 @@ android {
         kotlinOptions {
             freeCompilerArgs = listOf("-Xjsr305=strict")
             jvmTarget = "11"
-            apiVersion = "1.6"
-            languageVersion = "1.6"
+            apiVersion = "1.7"
+            languageVersion = "1.7"
         }
     }
 }
@@ -81,7 +77,7 @@ val customDokkaTask by tasks.creating(DokkaTask::class) {
         noAndroidSdkLink.set(false)
     }
     dependencies {
-        plugins("org.jetbrains.dokka:javadoc-plugin:_")
+        plugins(libs.javadoc.plugin)
     }
     inputs.dir("src/main/java")
     outputDirectory.set(buildDir.resolve("javadoc"))
@@ -171,19 +167,18 @@ detekt {
     buildUponDefaultConfig = true // preconfigure defaults
     allRules = false // activate all available (even unstable) rules.
     config = files("$rootDir/config/detekt.yml")
-
-    reports {
-        html.required.set(true)
-        xml.required.set(true)
-        txt.required.set(true)
-        sarif.required.set(true)
-    }
 }
 
 tasks {
     withType<io.gitlab.arturbosch.detekt.Detekt>().configureEach {
         // Target version of the generated JVM bytecode. It is used for type resolution.
         jvmTarget = "11"
+        reports {
+            html.required.set(true)
+            xml.required.set(true)
+            txt.required.set(true)
+            sarif.required.set(true)
+        }
     }
     withType<Test> {
         useJUnitPlatform()

@@ -7,13 +7,14 @@ plugins {
 }
 
 android {
-    buildToolsVersion = "32.0.0"
-    compileSdk = 32
+    buildToolsVersion = "33.0.0"
+    compileSdk = 33
 
     defaultConfig {
+        namespace = "com.example.sample"
         applicationId = "com.example.sample"
         minSdk = 23
-        targetSdk = 31
+        targetSdk = 33
         versionCode = 1
         versionName = "1.0"
 
@@ -31,16 +32,16 @@ android {
         targetCompatibility = JavaVersion.VERSION_11
     }
     kotlinOptions {
-        freeCompilerArgs = listOf("-Xjsr305=strict", "-Xopt-in=kotlin.RequiresOptIn")
+        freeCompilerArgs = listOf("-Xjsr305=strict", "-opt-in=kotlin.RequiresOptIn")
         jvmTarget = "11"
-        apiVersion = "1.6"
-        languageVersion = "1.6"
+        apiVersion = "1.7"
+        languageVersion = "1.7"
     }
     buildFeatures {
         compose = true
     }
     composeOptions {
-        kotlinCompilerExtensionVersion = versionFor(AndroidX.compose.runtime)
+        kotlinCompilerExtensionVersion = versionFor(AndroidX.compose.compiler)
     }
     packagingOptions {
         resources {
@@ -62,14 +63,14 @@ dependencies {
     implementation(AndroidX.compose.ui.toolingPreview)
     implementation(AndroidX.compose.material)
     implementation(AndroidX.compose.runtime.liveData)
-    implementation(AndroidX.lifecycle.runtimeKtx)
+    implementation(AndroidX.lifecycle.runtime.ktx)
     implementation(AndroidX.lifecycle.viewModelCompose)
     implementation(AndroidX.navigation.compose)
     implementation(Google.android.material)
 
     implementation(JakeWharton.timber)
 
-    implementation("com.google.accompanist:accompanist-permissions:_")
+    implementation(Google.accompanist.permissions)
 
     testImplementation(Testing.junit4)
     androidTestImplementation(AndroidX.test.ext.junit.ktx)
