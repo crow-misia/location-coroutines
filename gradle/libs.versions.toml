@@ -4,13 +4,13 @@
 
 gradle = { id = "gradle", version = "7.3.1" }
 
-org-jetbrains-kotlin-android = { id = "org.jetbrains.kotlin.android", version = "1.7.20" }
+org-jetbrains-kotlin-android = { id = "org.jetbrains.kotlin.android", version = "1.7.21" }
 
-io-gitlab-arturbosch-detekt = { id = "io.gitlab.arturbosch.detekt", version = "1.21.0" }
+io-gitlab-arturbosch-detekt = { id = "io.gitlab.arturbosch.detekt", version = "1.22.0" }
 
 [versions]
 
-kotlin = "1.7.20"
+kotlin = "1.7.21"
 
 [libraries]
 
