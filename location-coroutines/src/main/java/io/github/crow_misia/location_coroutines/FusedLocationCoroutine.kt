@@ -73,9 +73,9 @@ suspend inline fun FusedLocationCoroutine.checkLocationSettings(request: Locatio
 }
 
 suspend inline fun FusedLocationCoroutine.checkLocationSettings(
-    crossinline builder: LocationSettingsRequest.Builder.() -> Unit,
+    builder: LocationSettingsRequest.Builder.() -> Unit,
 ): LocationSettingsResponse {
-    return checkLocationSettings(LocationSettingsRequest.Builder().also { builder(it) }.build())
+    return checkLocationSettings(LocationSettingsRequest.Builder().apply(builder).build())
 }
 
 @ExperimentalCoroutinesApi
@@ -83,7 +83,7 @@ suspend inline fun FusedLocationCoroutine.checkLocationSettings(
 inline fun FusedLocationCoroutine.getLocationUpdates(
     priority: Int = Priority.PRIORITY_BALANCED_POWER_ACCURACY,
     intervalMillis: Long,
-    crossinline block: LocationRequest.Builder.() -> Unit = { },
+    block: LocationRequest.Builder.() -> Unit = { },
 ): Flow<Location> {
     return getLocationUpdates(LocationRequest.Builder(priority, intervalMillis).apply(block).build())
 }
@@ -91,21 +91,21 @@ inline fun FusedLocationCoroutine.getLocationUpdates(
 @ExperimentalCoroutinesApi
 @RequiresPermission(anyOf = [Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.ACCESS_FINE_LOCATION])
 suspend inline fun FusedLocationCoroutine.getCurrentLocation(
-    crossinline block: CurrentLocationRequest.Builder.() -> Unit = { },
+    block: CurrentLocationRequest.Builder.() -> Unit = { },
 ): Location? {
     return getCurrentLocation(CurrentLocationRequest.Builder().apply(block).build())
 }
 
 @RequiresPermission(anyOf = [Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.ACCESS_FINE_LOCATION])
 suspend inline fun FusedLocationCoroutine.getLastLocation(
-    crossinline block: LastLocationRequest.Builder.() -> Unit = { },
+    block: LastLocationRequest.Builder.() -> Unit = { },
 ): Location? {
     return getLastLocation(LastLocationRequest.Builder().apply(block).build())
 }
 
 suspend inline fun FusedLocationCoroutine.addGeofences(
     pendingIntent: PendingIntent,
-    crossinline block: GeofencingRequest.Builder.() -> Unit = { },
+    block: GeofencingRequest.Builder.() -> Unit = { },
 ) {
     return addGeofences(GeofencingRequest.Builder().apply(block).build(), pendingIntent)
 }
