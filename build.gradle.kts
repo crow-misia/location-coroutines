@@ -2,6 +2,7 @@
 plugins {
     id("com.android.application") apply false
     id("com.android.library") apply false
+    id("io.gitlab.arturbosch.detekt") apply false
     kotlin("android") apply false
 }
 
