@@ -43,6 +43,7 @@ android {
     lint {
         textReport = true
         checkDependencies = true
+        baseline = rootProject.file("lint.xml")
     }
 
     compileOptions {
