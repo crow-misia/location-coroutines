@@ -54,8 +54,8 @@ internal class FusedLocationCoroutineImpl(
 
         val callback = object : LocationCallback() {
             override fun onLocationResult(result: LocationResult) {
-                result.locations.forEach {
-                    trySend(it).isSuccess
+                for (location in result.locations) {
+                    trySend(location).isSuccess
                 }
             }
         }

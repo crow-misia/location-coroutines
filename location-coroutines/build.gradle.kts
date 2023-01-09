@@ -6,19 +6,19 @@ import java.net.URI
 
 plugins {
     id("com.android.library")
-    id("kotlin-android")
     id("com.google.android.gms.strict-version-matcher-plugin")
     id("io.gitlab.arturbosch.detekt")
     id("org.jetbrains.dokka")
     id("signing")
     id("maven-publish")
+    kotlin("android")
 }
 
 object Maven {
     const val groupId = "io.github.crow-misia.location-coroutines"
     const val artifactId = "location-coroutines"
     const val name = "location-coroutines"
-    const val version = "0.8.0"
+    const val version = "0.8.1"
     const val desc = "Coroutines function for FusesLocationProviderClient"
     const val siteUrl = "https://github.com/crow-misia/location-coroutines"
     const val gitUrl = "https://github.com/crow-misia/location-coroutines.git"
@@ -43,7 +43,7 @@ android {
     lint {
         textReport = true
         checkDependencies = true
-        baseline = rootProject.file("lint.xml")
+        baseline = file("lint-baseline.xml")
     }
 
     compileOptions {

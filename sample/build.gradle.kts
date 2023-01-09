@@ -5,12 +5,12 @@ import org.jetbrains.kotlin.gradle.tasks.KotlinJvmCompile
 
 plugins {
     id("com.android.application")
-    id("kotlin-android")
-    id("kotlin-kapt")
+    kotlin("android")
+    kotlin("kapt")
 }
 
 android {
-    buildToolsVersion = "33.0.0"
+    buildToolsVersion = "33.0.1"
     compileSdk = 33
 
     defaultConfig {
