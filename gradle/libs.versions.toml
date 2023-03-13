@@ -10,7 +10,7 @@ io-gitlab-arturbosch-detekt = { id = "io.gitlab.arturbosch.detekt", version = "1
 
 [versions]
 
-kotlin = "1.8.0"
+kotlin = "1.8.10"
 
 [libraries]
 
