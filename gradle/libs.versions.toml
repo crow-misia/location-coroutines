@@ -20,7 +20,7 @@ org-jacoco-ant = "org.jacoco:org.jacoco.ant:0.8.8"
 
 dokka-analysis = "org.jetbrains.dokka:dokka-analysis:1.7.20"
 
-dokka-base = "org.jetbrains.dokka:dokka-base:1.7.20"
+dokka-base = "org.jetbrains.dokka:dokka-base:1.8.10"
 
 javadoc-plugin = "org.jetbrains.dokka:javadoc-plugin:1.7.20"
 
