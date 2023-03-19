@@ -60,7 +60,6 @@ internal class FusedLocationCoroutineImpl(
         }
     }
 
-    @ExperimentalCoroutinesApi
     @RequiresPermission(anyOf = [Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.ACCESS_FINE_LOCATION])
     override fun getLocationUpdates(request: LocationRequest): Flow<Location> = callbackFlow {
         val thread = HandlerThread("fusedLocationCoroutineImpl")

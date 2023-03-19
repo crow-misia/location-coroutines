@@ -20,8 +20,17 @@ import android.app.PendingIntent
 import android.content.Context
 import android.location.Location
 import androidx.annotation.RequiresPermission
-import com.google.android.gms.location.*
-import kotlinx.coroutines.ExperimentalCoroutinesApi
+import com.google.android.gms.location.CurrentLocationRequest
+import com.google.android.gms.location.FusedLocationProviderClient
+import com.google.android.gms.location.GeofencingClient
+import com.google.android.gms.location.GeofencingRequest
+import com.google.android.gms.location.LastLocationRequest
+import com.google.android.gms.location.LocationRequest
+import com.google.android.gms.location.LocationServices
+import com.google.android.gms.location.LocationSettingsRequest
+import com.google.android.gms.location.LocationSettingsResponse
+import com.google.android.gms.location.Priority
+import com.google.android.gms.location.SettingsClient
 import kotlinx.coroutines.flow.Flow
 
 interface FusedLocationCoroutine {
@@ -57,14 +66,12 @@ interface FusedLocationCoroutine {
 
     suspend fun isLocationAvailable(request: LocationSettingsRequest): Boolean
 
-    @ExperimentalCoroutinesApi
     @RequiresPermission(anyOf = [Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.ACCESS_FINE_LOCATION])
     suspend fun getCurrentLocation(request: CurrentLocationRequest): Location?
 
     @RequiresPermission(anyOf = [Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.ACCESS_FINE_LOCATION])
     suspend fun getLastLocation(request: LastLocationRequest? = null): Location?
 
-    @ExperimentalCoroutinesApi
     @RequiresPermission(anyOf = [Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.ACCESS_FINE_LOCATION])
     fun getLocationUpdates(request: LocationRequest): Flow<Location>
 
@@ -93,7 +100,6 @@ suspend inline fun FusedLocationCoroutine.checkLocationSettings(
     return checkLocationSettings(LocationSettingsRequest.Builder().apply(builder).build())
 }
 
-@ExperimentalCoroutinesApi
 @RequiresPermission(anyOf = [Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.ACCESS_FINE_LOCATION])
 inline fun FusedLocationCoroutine.getLocationUpdates(
     priority: Int = Priority.PRIORITY_BALANCED_POWER_ACCURACY,
@@ -103,7 +109,6 @@ inline fun FusedLocationCoroutine.getLocationUpdates(
     return getLocationUpdates(LocationRequest.Builder(priority, intervalMillis).apply(block).build())
 }
 
-@ExperimentalCoroutinesApi
 @RequiresPermission(anyOf = [Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.ACCESS_FINE_LOCATION])
 suspend inline fun FusedLocationCoroutine.getCurrentLocation(
     block: CurrentLocationRequest.Builder.() -> Unit = { },

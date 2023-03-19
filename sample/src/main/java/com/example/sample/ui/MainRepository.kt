@@ -7,14 +7,12 @@ import com.google.android.gms.location.Priority
 import io.github.crow_misia.location_coroutines.FusedLocationCoroutine
 import io.github.crow_misia.location_coroutines.getLocationUpdates
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.*
 
 class MainRepository(context: Context) {
     private var locationFlow: SharedFlow<Location>? = null
     private val locationProviderClient = FusedLocationCoroutine.from(context)
 
-    @OptIn(ExperimentalCoroutinesApi::class)
     @SuppressLint("MissingPermission")
     fun startFetchLocation(scope: CoroutineScope): Flow<Location> {
         val flow = locationFlow ?: run {
