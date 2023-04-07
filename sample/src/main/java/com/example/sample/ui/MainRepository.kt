@@ -10,20 +10,13 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.*
 
 class MainRepository(context: Context) {
-    private var locationFlow: SharedFlow<Location>? = null
     private val locationProviderClient = FusedLocationCoroutine.from(context)
 
     @SuppressLint("MissingPermission")
-    fun startFetchLocation(scope: CoroutineScope): Flow<Location> {
-        val flow = locationFlow ?: run {
-            locationProviderClient.getLocationUpdates(
-                intervalMillis = 1000L,
-                priority = Priority.PRIORITY_HIGH_ACCURACY,
-            ).shareIn(scope, SharingStarted.WhileSubscribed(), 1).also {
-                locationFlow = it
-            }
-        }
-        return flow
+    fun startFetchLocation(): Flow<Location> {
+        return locationProviderClient.getLocationUpdates(
+            intervalMillis = 1000L,
+            priority = Priority.PRIORITY_HIGH_ACCURACY,
+        )
     }
-
 }

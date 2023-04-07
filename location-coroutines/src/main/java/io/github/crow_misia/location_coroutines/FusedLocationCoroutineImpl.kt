@@ -27,6 +27,7 @@ import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.callbackFlow
 import kotlinx.coroutines.tasks.await
+import java.util.concurrent.Executors
 
 internal class FusedLocationCoroutineImpl(
     private val locationProvider: Lazy<FusedLocationProviderClient>,
@@ -62,23 +63,14 @@ internal class FusedLocationCoroutineImpl(
 
     @RequiresPermission(anyOf = [Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.ACCESS_FINE_LOCATION])
     override fun getLocationUpdates(request: LocationRequest): Flow<Location> = callbackFlow {
-        val thread = HandlerThread("fusedLocationCoroutineImpl")
-        thread.start()
-        val looper = thread.looper
+        val executor = Executors.newSingleThreadExecutor()
+        val callback = LocationListener { location -> trySend(location) }
 
-        val callback = object : LocationCallback() {
-            override fun onLocationResult(result: LocationResult) {
-                for (location in result.locations) {
-                    trySend(location).isSuccess
-                }
-            }
-        }
-
-        locationProvider.value.requestLocationUpdates(request, callback, looper).await()
+        locationProvider.value.requestLocationUpdates(request, executor, callback).await()
         awaitClose {
             locationProvider.value.removeLocationUpdates(callback)
                 .addOnCompleteListener {
-                    thread.quit()
+                    executor.shutdown()
                 }
         }
     }
