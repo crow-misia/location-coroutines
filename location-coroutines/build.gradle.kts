@@ -11,7 +11,7 @@ plugins {
     id("org.jetbrains.dokka")
     id("signing")
     id("maven-publish")
-    kotlin("android")
+    id("org.jetbrains.kotlin.android")
 }
 
 object Maven {
@@ -31,11 +31,10 @@ group = Maven.groupId
 version = Maven.version
 
 android {
-    buildToolsVersion = "33.0.2"
+    namespace = "io.github.crow_misia.location_coroutines"
     compileSdk = 33
 
     defaultConfig {
-        namespace = "io.github.crow_misia.location_coroutines"
         minSdk = 14
         consumerProguardFiles("consumer-proguard-rules.pro")
     }
@@ -50,6 +49,12 @@ android {
         sourceCompatibility = JavaVersion.VERSION_11
         targetCompatibility = JavaVersion.VERSION_11
     }
+
+    publishing {
+        singleVariant("release") {
+            withSourcesJar()
+        }
+    }
 }
 
 tasks.withType<KotlinJvmCompile>().all {
@@ -63,18 +68,11 @@ tasks.withType<KotlinJvmCompile>().all {
 }
 
 dependencies {
-    api(Kotlin.stdlib)
-    api(KotlinX.coroutines.core)
+    implementation(Kotlin.stdlib)
+    implementation(KotlinX.coroutines.core)
     api(KotlinX.coroutines.android)
     api(KotlinX.coroutines.playServices)
     api(Google.android.playServices.location)
-}
-
-val sourcesJar by tasks.creating(Jar::class) {
-    group = JavaBasePlugin.DOCUMENTATION_GROUP
-    description = "Assembles sources JAR"
-    archiveClassifier.set("sources")
-    from(sourceSets.create("main").allSource)
 }
 
 val customDokkaTask by tasks.creating(DokkaTask::class) {
@@ -112,7 +110,6 @@ afterEvaluate {
                     |    Version: $version
                 """.trimMargin())
 
-                artifact(sourcesJar)
                 artifact(javadocJar)
 
                 pom {
@@ -171,13 +168,14 @@ afterEvaluate {
 detekt {
     buildUponDefaultConfig = true // preconfigure defaults
     allRules = false // activate all available (even unstable) rules.
-    config = files("$rootDir/config/detekt.yml")
+    config.setFrom(files("$rootDir/config/detekt.yml"))
 }
 
 tasks {
     withType<io.gitlab.arturbosch.detekt.Detekt>().configureEach {
         // Target version of the generated JVM bytecode. It is used for type resolution.
         jvmTarget = "11"
+
         reports {
             html.required.set(true)
             xml.required.set(true)
