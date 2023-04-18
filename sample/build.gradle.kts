@@ -5,12 +5,11 @@ import org.jetbrains.kotlin.gradle.tasks.KotlinJvmCompile
 
 plugins {
     id("com.android.application")
-    kotlin("android")
-    kotlin("kapt")
+    id("org.jetbrains.kotlin.android")
+    id("org.jetbrains.kotlin.kapt")
 }
 
 android {
-    buildToolsVersion = "33.0.1"
     compileSdk = 33
 
     defaultConfig {
@@ -40,7 +39,7 @@ android {
     composeOptions {
         kotlinCompilerExtensionVersion = versionFor(AndroidX.compose.compiler)
     }
-    packagingOptions {
+    packaging {
         resources {
             excludes.add("/META-INF/{AL2.0,LGPL2.1}")
         }

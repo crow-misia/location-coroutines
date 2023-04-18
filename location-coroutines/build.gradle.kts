@@ -166,8 +166,10 @@ afterEvaluate {
 }
 
 detekt {
-    buildUponDefaultConfig = true // preconfigure defaults
-    allRules = false // activate all available (even unstable) rules.
+    parallel = true
+    buildUponDefaultConfig = true
+    allRules = false
+    autoCorrect = true
     config.setFrom(files("$rootDir/config/detekt.yml"))
 }
 
@@ -182,6 +184,9 @@ tasks {
             txt.required.set(true)
             sarif.required.set(true)
         }
+    }
+    withType<io.gitlab.arturbosch.detekt.DetektCreateBaselineTask>().configureEach {
+        jvmTarget = "11"
     }
     withType<Test> {
         useJUnitPlatform()
