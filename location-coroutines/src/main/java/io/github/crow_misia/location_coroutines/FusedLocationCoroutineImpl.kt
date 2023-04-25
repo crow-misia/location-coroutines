@@ -18,7 +18,6 @@ package io.github.crow_misia.location_coroutines
 import android.Manifest
 import android.app.PendingIntent
 import android.location.Location
-import android.os.HandlerThread
 import androidx.annotation.RequiresPermission
 import com.google.android.gms.location.*
 import com.google.android.gms.tasks.CancellationTokenSource

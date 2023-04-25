@@ -4,8 +4,6 @@
 
 org-jetbrains-kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
 
-gradle = { id = "gradle", version = "8.0.0" }
-
 [versions]
 
 kotlin = "1.8.20"
