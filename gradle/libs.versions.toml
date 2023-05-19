@@ -8,14 +8,16 @@ org-jetbrains-kotlin-android = { id = "org.jetbrains.kotlin.android", version.re
 
 kotlin = "1.8.21"
 
+dokka = "1.8.10"
+
 [libraries]
 
 org-jacoco-ant = "org.jacoco:org.jacoco.ant:0.8.9"
 
-dokka-gradle-plugin = "org.jetbrains.dokka:dokka-gradle-plugin:1.8.10"
+dokka-gradle-plugin = { group = "org.jetbrains.dokka", name = "dokka-gradle-plugin", version.ref = "dokka" }
 
-dokka-analysis = "org.jetbrains.dokka:dokka-analysis:1.8.10"
+dokka-analysis = { group = "org.jetbrains.dokka", name = "dokka-analysis", version.ref = "dokka" }
 
-dokka-base = "org.jetbrains.dokka:dokka-base:1.8.10"
+dokka-base = { group = "org.jetbrains.dokka", name = "dokka-base", version.ref = "dokka" }
 
-javadoc-plugin = "org.jetbrains.dokka:javadoc-plugin:1.8.10"
+javadoc-plugin = { group = "org.jetbrains.dokka", name = "javadoc-plugin", version.ref = "dokka" }
