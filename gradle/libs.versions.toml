@@ -8,7 +8,7 @@ org-jetbrains-kotlin-android = { id = "org.jetbrains.kotlin.android", version.re
 
 kotlin = "1.8.21"
 
-dokka = "1.8.10"
+dokka = "1.8.20"
 
 [libraries]
 
