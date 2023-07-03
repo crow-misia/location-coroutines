@@ -2,7 +2,6 @@ import org.jetbrains.dokka.gradle.DokkaTask
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 import org.jetbrains.kotlin.gradle.dsl.KotlinVersion
 import org.jetbrains.kotlin.gradle.tasks.KotlinJvmCompile
-import java.net.URI
 
 plugins {
     id("com.android.library")
@@ -18,7 +17,7 @@ object Maven {
     const val groupId = "io.github.crow-misia.location-coroutines"
     const val artifactId = "location-coroutines"
     const val name = "location-coroutines"
-    const val version = "0.13.1"
+    const val version = "0.14.0"
     const val desc = "Coroutines function for FusesLocationProviderClient"
     const val siteUrl = "https://github.com/crow-misia/location-coroutines"
     const val gitUrl = "https://github.com/crow-misia/location-coroutines.git"
@@ -147,20 +146,19 @@ afterEvaluate {
         }
         repositories {
             maven {
-                val releasesRepoUrl = URI("https://oss.sonatype.org/service/local/staging/deploy/maven2")
-                val snapshotsRepoUrl = URI("https://oss.sonatype.org/content/repositories/snapshots")
+                val releasesRepoUrl = uri("https://oss.sonatype.org/service/local/staging/deploy/maven2")
+                val snapshotsRepoUrl = uri("https://oss.sonatype.org/content/repositories/snapshots")
                 url = if (Maven.version.endsWith("SNAPSHOT")) snapshotsRepoUrl else releasesRepoUrl
-                val sonatypeUsername: String? by project
-                val sonatypePassword: String? by project
                 credentials {
-                    username = sonatypeUsername.orEmpty()
-                    password = sonatypePassword.orEmpty()
+                    username = project.findProperty("sona.user") as String? ?: providers.environmentVariable("SONA_USER").orNull
+                    password = project.findProperty("sona.password") as String? ?: providers.environmentVariable("SONA_PASSWORD").orNull
                 }
             }
         }
     }
 
     signing {
+        useGpgCmd()
         sign(publishing.publications.getByName("maven"))
     }
 }
