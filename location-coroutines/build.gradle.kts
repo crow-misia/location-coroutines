@@ -10,14 +10,14 @@ plugins {
     id("org.jetbrains.dokka")
     id("signing")
     id("maven-publish")
-    id("org.jetbrains.kotlin.android")
+    kotlin("android")
 }
 
 object Maven {
     const val groupId = "io.github.crow-misia.location-coroutines"
     const val artifactId = "location-coroutines"
     const val name = "location-coroutines"
-    const val version = "0.14.0"
+    const val version = "0.15.0"
     const val desc = "Coroutines function for FusesLocationProviderClient"
     const val siteUrl = "https://github.com/crow-misia/location-coroutines"
     const val gitUrl = "https://github.com/crow-misia/location-coroutines.git"
@@ -31,7 +31,7 @@ version = Maven.version
 
 android {
     namespace = "io.github.crow_misia.location_coroutines"
-    compileSdk = 33
+    compileSdk = 34
 
     defaultConfig {
         minSdk = 14
@@ -56,13 +56,13 @@ android {
     }
 }
 
-tasks.withType<KotlinJvmCompile>().all {
+kotlin {
     compilerOptions {
         freeCompilerArgs.addAll("-Xjsr305=strict")
         javaParameters.set(true)
         jvmTarget.set(JvmTarget.JVM_11)
-        apiVersion.set(KotlinVersion.KOTLIN_1_8)
-        languageVersion.set(KotlinVersion.KOTLIN_1_8)
+        apiVersion.set(KotlinVersion.KOTLIN_1_9)
+        languageVersion.set(KotlinVersion.KOTLIN_1_9)
     }
 }
 
