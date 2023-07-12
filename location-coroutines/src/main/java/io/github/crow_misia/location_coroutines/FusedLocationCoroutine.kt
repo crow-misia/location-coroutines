@@ -70,7 +70,10 @@ interface FusedLocationCoroutine {
     suspend fun getCurrentLocation(request: CurrentLocationRequest): Location?
 
     @RequiresPermission(anyOf = [Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.ACCESS_FINE_LOCATION])
-    suspend fun getLastLocation(request: LastLocationRequest? = null): Location?
+    suspend fun getLastLocation(): Location? = getLastLocation(null)
+
+    @RequiresPermission(anyOf = [Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.ACCESS_FINE_LOCATION])
+    suspend fun getLastLocation(request: LastLocationRequest?): Location?
 
     @RequiresPermission(anyOf = [Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.ACCESS_FINE_LOCATION])
     fun getLocationUpdates(request: LocationRequest): Flow<Location>
@@ -106,7 +109,9 @@ inline fun FusedLocationCoroutine.getLocationUpdates(
     intervalMillis: Long,
     block: LocationRequest.Builder.() -> Unit = { },
 ): Flow<Location> {
-    return getLocationUpdates(LocationRequest.Builder(priority, intervalMillis).apply(block).build())
+    return getLocationUpdates(
+        request = LocationRequest.Builder(priority, intervalMillis).apply(block).build(),
+    )
 }
 
 @RequiresPermission(anyOf = [Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.ACCESS_FINE_LOCATION])

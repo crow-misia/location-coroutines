@@ -18,6 +18,7 @@ package io.github.crow_misia.location_coroutines
 import android.Manifest
 import android.app.PendingIntent
 import android.location.Location
+import android.os.HandlerThread
 import androidx.annotation.RequiresPermission
 import com.google.android.gms.location.*
 import com.google.android.gms.tasks.CancellationTokenSource
@@ -25,8 +26,8 @@ import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.callbackFlow
+import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
-import java.util.concurrent.Executors
 
 internal class FusedLocationCoroutineImpl(
     private val locationProvider: Lazy<FusedLocationProviderClient>,
@@ -62,14 +63,25 @@ internal class FusedLocationCoroutineImpl(
 
     @RequiresPermission(anyOf = [Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.ACCESS_FINE_LOCATION])
     override fun getLocationUpdates(request: LocationRequest): Flow<Location> = callbackFlow {
-        val executor = Executors.newSingleThreadExecutor()
-        val callback = LocationListener { location -> trySend(location) }
+        val handlerThread = HandlerThread("location")
+        handlerThread.start()
+        val looper = handlerThread.looper
+        val callback = object : LocationCallback() {
+            override fun onLocationResult(result: LocationResult) {
+                launch {
+                    result.locations.forEach {
+                        send(it)
+                    }
+                }
+            }
+       }
 
-        locationProvider.value.requestLocationUpdates(request, executor, callback).await()
+        val provider = locationProvider.value
+        provider.requestLocationUpdates(request, callback, looper).await()
         awaitClose {
-            locationProvider.value.removeLocationUpdates(callback)
+            provider.removeLocationUpdates(callback)
                 .addOnCompleteListener {
-                    executor.shutdown()
+                    handlerThread.quit()
                 }
         }
     }
