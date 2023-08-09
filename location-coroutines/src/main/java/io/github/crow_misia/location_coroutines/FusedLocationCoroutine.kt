@@ -32,6 +32,7 @@ import com.google.android.gms.location.LocationSettingsResponse
 import com.google.android.gms.location.Priority
 import com.google.android.gms.location.SettingsClient
 import kotlinx.coroutines.flow.Flow
+import kotlin.time.Duration
 
 interface FusedLocationCoroutine {
     companion object {
@@ -101,6 +102,17 @@ suspend inline fun FusedLocationCoroutine.checkLocationSettings(
     builder: LocationSettingsRequest.Builder.() -> Unit,
 ): LocationSettingsResponse {
     return checkLocationSettings(LocationSettingsRequest.Builder().apply(builder).build())
+}
+
+@RequiresPermission(anyOf = [Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.ACCESS_FINE_LOCATION])
+inline fun FusedLocationCoroutine.getLocationUpdates(
+    priority: Int = Priority.PRIORITY_BALANCED_POWER_ACCURACY,
+    interval: Duration,
+    block: LocationRequest.Builder.() -> Unit = { },
+): Flow<Location> {
+    return getLocationUpdates(
+        request = LocationRequest.Builder(priority, interval.inWholeMilliseconds).apply(block).build(),
+    )
 }
 
 @RequiresPermission(anyOf = [Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.ACCESS_FINE_LOCATION])
