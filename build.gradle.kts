@@ -19,5 +19,5 @@ buildscript {
 
 val clean by tasks.creating(Delete::class) {
     group = "build"
-    delete(rootProject.buildDir)
+    delete(rootProject.layout.buildDirectory)
 }
