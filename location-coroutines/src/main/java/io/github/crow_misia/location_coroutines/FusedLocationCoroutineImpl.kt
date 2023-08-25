@@ -16,19 +16,25 @@
 package io.github.crow_misia.location_coroutines
 
 import android.Manifest
+import android.app.Activity
 import android.app.PendingIntent
 import android.location.Location
-import android.os.HandlerThread
-import android.os.Looper
-import android.util.Log
+import androidx.activity.ComponentActivity
+import androidx.activity.result.ActivityResultLauncher
+import androidx.activity.result.IntentSenderRequest
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.RequiresPermission
+import com.google.android.gms.common.api.ApiException
+import com.google.android.gms.common.api.ResolvableApiException
 import com.google.android.gms.location.*
 import com.google.android.gms.tasks.CancellationTokenSource
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.channels.ProducerScope
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.channels.trySendBlocking
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.callbackFlow
+import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
 import java.util.concurrent.Executors
 
@@ -39,6 +45,40 @@ internal class FusedLocationCoroutineImpl(
 ) : FusedLocationCoroutine {
     override suspend fun checkLocationSettings(request: LocationSettingsRequest): LocationSettingsResponse {
         return settings.value.checkLocationSettings(request).await()
+    }
+
+    override fun checkLocationSettings(
+        request: LocationSettingsRequest,
+        activity: Activity,
+        requestCode: Int,
+    ) = checkLocationSettings(request) {
+        it.startResolutionForResult(activity, requestCode)
+    }
+
+    override fun checkLocationSettings(
+        request: LocationSettingsRequest,
+        launcher: ActivityResultLauncher<IntentSenderRequest>,
+    ) = checkLocationSettings(request) {
+        val resolution = it.resolution
+        val intentSender = resolution.intentSender
+        launcher.launch(IntentSenderRequest.Builder(intentSender).build())
+    }
+
+    private fun checkLocationSettings(
+        request: LocationSettingsRequest,
+        errorBlock: suspend ProducerScope<LocationSettingsResponse>.(ResolvableApiException) -> Unit,
+    ) = callbackFlow {
+        try {
+            send(checkLocationSettings(request))
+            close()
+        } catch (cause: ApiException) {
+            if (cause is ResolvableApiException) {
+                errorBlock(cause)
+                close()
+            }
+            close(cause)
+        }
+        awaitClose()
     }
 
     @RequiresPermission(anyOf = [Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.ACCESS_FINE_LOCATION])

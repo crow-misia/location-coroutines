@@ -16,10 +16,13 @@
 package io.github.crow_misia.location_coroutines
 
 import android.Manifest
+import android.app.Activity
 import android.app.PendingIntent
 import android.content.Context
 import android.location.Location
 import androidx.annotation.RequiresPermission
+import androidx.activity.result.ActivityResultLauncher
+import androidx.activity.result.IntentSenderRequest
 import com.google.android.gms.location.CurrentLocationRequest
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.GeofencingClient
@@ -65,6 +68,17 @@ interface FusedLocationCoroutine {
 
     suspend fun checkLocationSettings(request: LocationSettingsRequest): LocationSettingsResponse
 
+    fun checkLocationSettings(
+        request: LocationSettingsRequest,
+        activity: Activity,
+        requestCode: Int,
+    ): Flow<LocationSettingsResponse>
+
+    fun checkLocationSettings(
+        request: LocationSettingsRequest,
+        launcher: ActivityResultLauncher<IntentSenderRequest>,
+    ): Flow<LocationSettingsResponse>
+
     suspend fun isLocationAvailable(request: LocationSettingsRequest): Boolean
 
     @RequiresPermission(anyOf = [Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.ACCESS_FINE_LOCATION])
@@ -99,9 +113,39 @@ suspend inline fun FusedLocationCoroutine.checkLocationSettings(request: Locatio
 }
 
 suspend inline fun FusedLocationCoroutine.checkLocationSettings(
+    request: LocationRequest,
+    activity: Activity,
+    requestCode: Int,
+): Flow<LocationSettingsResponse> {
+    return checkLocationSettings(activity, requestCode) { addLocationRequest(request) }
+}
+
+suspend inline fun FusedLocationCoroutine.checkLocationSettings(
+    request: LocationRequest,
+    launcher: ActivityResultLauncher<IntentSenderRequest>,
+): Flow<LocationSettingsResponse> {
+    return checkLocationSettings(launcher) { addLocationRequest(request) }
+}
+
+suspend inline fun FusedLocationCoroutine.checkLocationSettings(
     builder: LocationSettingsRequest.Builder.() -> Unit,
 ): LocationSettingsResponse {
     return checkLocationSettings(LocationSettingsRequest.Builder().apply(builder).build())
+}
+
+inline fun FusedLocationCoroutine.checkLocationSettings(
+    activity: Activity,
+    requestCode: Int,
+    builder: LocationSettingsRequest.Builder.() -> Unit,
+): Flow<LocationSettingsResponse> {
+    return checkLocationSettings(LocationSettingsRequest.Builder().apply(builder).build(), activity, requestCode)
+}
+
+inline fun FusedLocationCoroutine.checkLocationSettings(
+    launcher: ActivityResultLauncher<IntentSenderRequest>,
+    builder: LocationSettingsRequest.Builder.() -> Unit,
+): Flow<LocationSettingsResponse> {
+    return checkLocationSettings(LocationSettingsRequest.Builder().apply(builder).build(), launcher)
 }
 
 @RequiresPermission(anyOf = [Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.ACCESS_FINE_LOCATION])

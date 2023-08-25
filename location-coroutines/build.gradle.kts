@@ -16,7 +16,7 @@ object Maven {
     const val groupId = "io.github.crow-misia.location-coroutines"
     const val artifactId = "location-coroutines"
     const val name = "location-coroutines"
-    const val version = "0.17.0"
+    const val version = "0.18.0"
     const val desc = "Coroutines function for FusesLocationProviderClient"
     const val siteUrl = "https://github.com/crow-misia/location-coroutines"
     const val gitUrl = "https://github.com/crow-misia/location-coroutines.git"
@@ -41,6 +41,25 @@ android {
         textReport = true
         checkDependencies = true
         baseline = file("lint-baseline.xml")
+    }
+
+    testOptions {
+        unitTests {
+            isIncludeAndroidResources = true
+        }
+    }
+
+    // Tests can be Robolectric or instrumented tests
+    sourceSets {
+        val sharedTestDir = "src/sharedTest/java"
+        getByName("test") {
+            java.srcDir(sharedTestDir)
+            kotlin.srcDir(sharedTestDir)
+        }
+        getByName("androidTest") {
+            java.srcDir(sharedTestDir)
+            kotlin.srcDir(sharedTestDir)
+        }
     }
 
     compileOptions {
@@ -68,6 +87,7 @@ kotlin {
 dependencies {
     implementation(Kotlin.stdlib)
     implementation(KotlinX.coroutines.core)
+    implementation(AndroidX.activity.ktx)
     api(KotlinX.coroutines.android)
     api(KotlinX.coroutines.playServices)
     api(Google.android.playServices.location)

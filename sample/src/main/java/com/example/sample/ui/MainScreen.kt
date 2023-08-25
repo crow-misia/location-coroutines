@@ -1,9 +1,12 @@
 package com.example.sample.ui
 
+import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import android.provider.Settings
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.layout.*
 import androidx.compose.material3.Button
 import androidx.compose.material3.Text
@@ -23,30 +26,53 @@ fun MainScreen() {
     val context = LocalContext.current
     val repository = MainRepository(context)
     val composableScope = rememberCoroutineScope()
+    var measureState by remember { mutableIntStateOf(0) }
     var location by remember { mutableStateOf("") }
     var job by remember { mutableStateOf<Job?>(null) }
+
+    val locationSettingsLauncher = rememberLauncherForActivityResult(ActivityResultContracts.StartIntentSenderForResult()) {
+        if (it.resultCode == Activity.RESULT_OK) {
+            // 測位処理を開始する
+            measureState++
+        } else {
+            // 使用しないを選択されても、再度ダイアログを出す場合は、インクリメント、出さない場合は0をセットする
+            measureState++
+        }
+    }
+
+    LaunchedEffect(measureState) {
+        if (measureState > 0) {
+            job?.cancel()
+            job = composableScope.launch {
+                repository.checkLocationSettings(locationSettingsLauncher)
+                    .onEach {
+                        location = it.locationSettingsStates.toString()
+                    }
+                    .launchIn(this@launch)
+
+                repository.startFetchLocation()
+                    .onEach {
+                        location = it.toString()
+                    }
+                    .launchIn(this)
+            }
+        } else if (measureState == 0) {
+            location = "xxx"
+            job?.cancel()
+            job = null
+        }
+    }
 
     Row(
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.Center,
     ) {
+        Text(measureState.toString())
         MainContent(
             location = location,
-            onStart = {
-                job?.cancel()
-                job = composableScope.launch {
-                    repository.startFetchLocation()
-                        .onEach {
-                            location = it.toString()
-                        }
-                        .launchIn(this)
-                }
-            },
-            onStop = {
-                location = "xxx"
-                job?.cancel()
-                job = null
-            },
+            measurementState = measureState > 0,
+            onStart = { measureState++ },
+            onStop = { measureState = 0 },
             navigateToSettingsScreen = {
                 context.openSettings()
             }
@@ -59,24 +85,25 @@ fun MainScreen() {
 @Composable
 fun MainContent(
     location: String = "xxxx",
+    measurementState: Boolean = false,
     onStart: () -> Unit = {},
     onStop: () -> Unit = {},
     navigateToSettingsScreen: () -> Unit = {}
 ) {
-    var startState by remember { mutableStateOf(false) }
-    var measurementState by remember { mutableStateOf(false) }
+    var permissionStateCount by remember { mutableLongStateOf(0L) }
     val permissionState = rememberMultiplePermissionsState(listOf(
         android.Manifest.permission.ACCESS_COARSE_LOCATION,
         android.Manifest.permission.ACCESS_FINE_LOCATION
     ))
 
-    when {
-        permissionState.allPermissionsGranted -> {
-            if (startState && !measurementState) {
-                measurementState = true
-                onStart()
-            }
+    LaunchedEffect(permissionState, permissionStateCount) {
+        if (permissionState.allPermissionsGranted && permissionStateCount > 0) {
+            onStart()
         }
+    }
+
+    when {
+        permissionState.allPermissionsGranted -> Unit
         permissionState.shouldShowRationale -> {
             Column {
                 Text("permission is required")
@@ -91,20 +118,20 @@ fun MainContent(
             }
         }
     }
+
     Column {
         if (measurementState) {
             Button(onClick = {
+                permissionStateCount = 0
                 onStop()
-                startState = false
-                measurementState = false
             }) {
                 Text(text = "Stop")
             }
             Text(text = location)
         } else {
             Button(onClick = {
-                startState = true
                 permissionState.launchMultiplePermissionRequest()
+                permissionStateCount++
             }) {
                 Text(text = "Start")
             }
