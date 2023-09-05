@@ -68,15 +68,16 @@ internal class FusedLocationCoroutineImpl(
         request: LocationSettingsRequest,
         errorBlock: suspend ProducerScope<LocationSettingsResponse>.(ResolvableApiException) -> Unit,
     ) = callbackFlow {
-        try {
+        runCatching {
             send(checkLocationSettings(request))
             close()
-        } catch (cause: ApiException) {
-            if (cause is ResolvableApiException) {
-                errorBlock(cause)
+        }.onFailure {
+            if (it is ResolvableApiException) {
+                errorBlock(it)
                 close()
+            } else {
+                close(it)
             }
-            close(cause)
         }
         awaitClose()
     }
