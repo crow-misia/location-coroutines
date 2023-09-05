@@ -7,7 +7,7 @@ pluginManagement {
 }
 
 plugins {
-    id("de.fayard.refreshVersions") version "0.60.1"
+    id("de.fayard.refreshVersions") version "0.60.2"
 }
 
 dependencyResolutionManagement {
@@ -15,7 +15,7 @@ dependencyResolutionManagement {
     repositories {
         google()
         mavenCentral()
-        maven(url = "https://androidx.dev/storage/compose-compiler/repository/")
+//        maven(url = "https://androidx.dev/storage/compose-compiler/repository/")
     }
 }
 
