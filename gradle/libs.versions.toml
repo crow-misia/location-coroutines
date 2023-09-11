@@ -6,8 +6,6 @@ dokka = "1.9.0"
 
 [libraries]
 
-org-jacoco-ant = "org.jacoco:org.jacoco.ant:0.8.9"
-
 dokka-gradle-plugin = { group = "org.jetbrains.dokka", name = "dokka-gradle-plugin", version.ref = "dokka" }
 
 dokka-analysis = { group = "org.jetbrains.dokka", name = "dokka-analysis", version.ref = "dokka" }
