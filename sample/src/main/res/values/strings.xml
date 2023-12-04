@@ -1,9 +1,3 @@
 <resources>
     <string name="app_name">sample</string>
-    <string name="button_allow">Allow</string>
-    <string name="button_deny">Deny</string>
-
-    <string name="permission_location_rationale">Location permission is needed to notify location.</string>
-    <string name="permission_location_denied">Location permission was denied. Please consider granting it in order to access the location!</string>
-    <string name="permission_location_never_ask_again">Location permission was denied with never ask again.</string>
 </resources>
