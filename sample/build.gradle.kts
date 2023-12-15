@@ -1,12 +1,9 @@
-import de.fayard.refreshVersions.core.versionFor
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 import org.jetbrains.kotlin.gradle.dsl.KotlinVersion
-import org.jetbrains.kotlin.gradle.tasks.KotlinJvmCompile
 
 plugins {
-    id("com.android.application")
-    id("org.jetbrains.kotlin.android")
-    id("org.jetbrains.kotlin.kapt")
+    alias(libs.plugins.android.application)
+    alias(libs.plugins.kotlin.android)
 }
 
 android {
@@ -40,7 +37,7 @@ android {
     }
 
     composeOptions {
-        kotlinCompilerExtensionVersion = versionFor(AndroidX.compose.compiler)
+        kotlinCompilerExtensionVersion = libs.androidx.compose.compiler.get().version
     }
 
     packaging {
@@ -50,6 +47,8 @@ android {
     }
 
     lint {
+        textReport = true
+        checkDependencies = true
         baseline = file("lint-baseline.xml")
     }
 }
@@ -67,29 +66,35 @@ kotlin {
 dependencies {
     implementation(project(":location-coroutines"))
 
-    implementation(Kotlin.stdlib)
+    implementation(libs.kotlin.stdlib)
 
-    implementation(AndroidX.activity.compose)
-    implementation(AndroidX.appCompat)
-    implementation(AndroidX.core.ktx)
+    implementation(libs.androidx.activity.compose)
+    implementation(libs.androidx.appcompat)
+    implementation(libs.androidx.core.ktx)
 
-    implementation(AndroidX.compose.ui)
-    implementation(AndroidX.compose.ui.toolingPreview)
-    implementation(AndroidX.compose.material3)
-    implementation(AndroidX.compose.runtime.liveData)
-    implementation(AndroidX.lifecycle.runtime.ktx)
-    implementation(AndroidX.lifecycle.viewModelCompose)
-    implementation(AndroidX.navigation.compose)
-    implementation(Google.android.material)
+    implementation(libs.androidx.compose.ui)
+    implementation(libs.androidx.compose.ui.tooling.preview)
+    implementation(libs.androidx.compose.material3)
+    implementation(libs.androidx.compose.runtime)
+    implementation(libs.androidx.lifecycle.runtime.compose)
+    implementation(libs.androidx.lifecycle.runtime)
+    implementation(libs.androidx.lifecycle.viewmodel.compose)
+    implementation(libs.androidx.navigation.compose)
 
-    implementation(JakeWharton.timber)
+    implementation(libs.timber)
 
-    implementation(Google.accompanist.permissions)
+    implementation(libs.google.accompanist.permissions)
 
-    testImplementation(Testing.junit4)
-    androidTestImplementation(AndroidX.test.ext.junit.ktx)
-    androidTestImplementation(AndroidX.test.espresso.core)
-    androidTestImplementation(AndroidX.compose.ui.testJunit4)
+    testImplementation(libs.kotest.runner.junit5)
+    testImplementation(libs.kotest.assertions.core)
+    testImplementation(libs.kotest.property)
+    testImplementation(libs.mockk)
 
-    debugImplementation(AndroidX.compose.ui.tooling)
+    androidTestImplementation(libs.androidx.test.ext.junit.ktx)
+    androidTestImplementation(libs.androidx.test.espresso.core)
+    androidTestImplementation(libs.androidx.compose.ui.test.junit4)
+    androidTestImplementation(libs.mockk.android)
+
+    debugImplementation(libs.androidx.compose.ui.test.manifest)
+    debugImplementation(libs.androidx.compose.ui.tooling)
 }

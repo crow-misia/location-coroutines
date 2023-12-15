@@ -3,13 +3,12 @@ import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 import org.jetbrains.kotlin.gradle.dsl.KotlinVersion
 
 plugins {
-    id("com.android.library")
-    id("com.google.android.gms.strict-version-matcher-plugin")
-    id("io.gitlab.arturbosch.detekt")
-    id("org.jetbrains.dokka")
+    alias(libs.plugins.android.library)
+    alias(libs.plugins.dokka)
+    alias(libs.plugins.detekt)
+    alias(libs.plugins.kotlin.android)
     id("signing")
     id("maven-publish")
-    kotlin("android")
 }
 
 object Maven {
@@ -33,7 +32,7 @@ android {
     compileSdk = 34
 
     defaultConfig {
-        minSdk = 14
+        minSdk = 19
         consumerProguardFiles("consumer-proguard-rules.pro")
     }
 
@@ -85,12 +84,14 @@ kotlin {
 }
 
 dependencies {
-    implementation(Kotlin.stdlib)
-    implementation(KotlinX.coroutines.core)
-    implementation(AndroidX.activity.ktx)
-    api(KotlinX.coroutines.android)
-    api(KotlinX.coroutines.playServices)
-    api(Google.android.playServices.location)
+    implementation(libs.kotlin.stdlib)
+    implementation(libs.kotlinx.coroutines.android)
+    implementation(libs.kotlinx.coroutines.playservices)
+
+    implementation(libs.androidx.activity)
+
+    implementation(libs.google.playservices.base)
+    api(libs.google.playservices.location)
 }
 
 val customDokkaTask by tasks.creating(DokkaTask::class) {
@@ -98,7 +99,7 @@ val customDokkaTask by tasks.creating(DokkaTask::class) {
         noAndroidSdkLink.set(false)
     }
     dependencies {
-        plugins(libs.javadoc.plugin)
+        plugins(libs.dokka.javadoc.plugin)
     }
     inputs.dir("src/main/java")
     outputDirectory.set(layout.buildDirectory.dir("javadoc"))

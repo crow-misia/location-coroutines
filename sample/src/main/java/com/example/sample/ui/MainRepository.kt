@@ -1,7 +1,6 @@
 package com.example.sample.ui
 
 import android.annotation.SuppressLint
-import android.app.Activity
 import android.content.Context
 import android.location.Location
 import androidx.activity.result.ActivityResultLauncher
