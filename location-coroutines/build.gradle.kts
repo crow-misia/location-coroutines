@@ -46,6 +46,13 @@ android {
         unitTests {
             isIncludeAndroidResources = true
         }
+        unitTests.all {
+            it.useJUnitPlatform()
+            it.testLogging {
+                showStandardStreams = true
+                events("passed", "skipped", "failed")
+            }
+        }
     }
 
     // Tests can be Robolectric or instrumented tests
@@ -205,12 +212,5 @@ tasks {
     }
     withType<io.gitlab.arturbosch.detekt.DetektCreateBaselineTask>().configureEach {
         jvmTarget = "11"
-    }
-    withType<Test> {
-        useJUnitPlatform()
-        testLogging {
-            showStandardStreams = true
-            events("passed", "skipped", "failed")
-        }
     }
 }
