@@ -2,6 +2,8 @@ version: 2
 updates:
   - package-ecosystem: "github-actions"
     directory: "/"
+    registries:
+      - maven-google
     groups:
       all:
         patterns:
@@ -26,3 +28,8 @@ updates:
           - "*"
     schedule:
       interval: "daily"
+
+registries:
+  maven-google:
+    type: maven-repository
+    url: "https://dl.google.com/dl/android/maven2/"
