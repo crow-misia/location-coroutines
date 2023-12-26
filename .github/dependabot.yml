@@ -6,6 +6,15 @@ updates:
       all:
         patterns:
           - "*"
+        exclude-patterns:
+          - "org.jetbrains.kotlin:*"
+          - "org.jetbrains.kotlin.*"
+          - "androidx.compose.compiler*"
+      kotlin:
+        patterns:
+          - "org.jetbrains.kotlin:*"
+          - "org.jetbrains.kotlin.*"
+          - "androidx.compose.compiler*"
     schedule:
       interval: "daily"
 
