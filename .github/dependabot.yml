@@ -11,9 +11,25 @@ updates:
 
   - package-ecosystem: "gradle"
     directory: "/"
+    registries:
+      - maven-google
     groups:
       all:
         patterns:
           - "*"
+        exclude-patterns:
+          - "org.jetbrains.kotlin:*"
+          - "org.jetbrains.kotlin.*"
+          - "androidx.compose.compiler*"
+      kotlin:
+        patterns:
+          - "org.jetbrains.kotlin:*"
+          - "org.jetbrains.kotlin.*"
+          - "androidx.compose.compiler*"
     schedule:
       interval: "daily"
+
+registries:
+  maven-google:
+    type: maven-repository
+    url: "https://dl.google.com/dl/android/maven2/"
