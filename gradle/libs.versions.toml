@@ -110,7 +110,7 @@ mockk-android = { group = "io.mockk", name = "mockk-android", version.ref = "moc
 
 timber = { group = "com.jakewharton.timber", name = "timber", version.ref = "timber" }
 
-google-playservices-base = { group = "com.google.android.gms", name = "play-services-base", version = "18.2.0" }
+google-playservices-base = { group = "com.google.android.gms", name = "play-services-base", version = "18.3.0" }
 
 google-playservices-location = { group = "com.google.android.gms", name = "play-services-location", version = "21.0.1" }
 
