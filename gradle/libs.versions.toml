@@ -20,7 +20,7 @@ kotlin = "1.9.21"
 
 kotlinx-coroutines = "1.7.3"
 
-androidx-core = "1.13.0-alpha02"
+androidx-core = "1.13.0-alpha03"
 
 androidx-activity = "1.9.0-alpha01"
 
@@ -28,13 +28,13 @@ androidx-appcompat = "1.7.0-alpha03"
 
 androidx-compose-compiler = "1.5.7"
 
-androidx-compose-material3 = "1.2.0-beta01"
+androidx-compose-material3 = "1.2.0-beta02"
 
-androidx-compose-runtime = "1.6.0-beta03"
+androidx-compose-runtime = "1.6.0-rc01"
 
-androidx-compose-ui = "1.6.0-beta03"
+androidx-compose-ui = "1.6.0-rc01"
 
-androidx-lifecycle = "2.7.0-rc02"
+androidx-lifecycle = "2.7.0"
 
 androidx-navigation = "2.7.6"
 
