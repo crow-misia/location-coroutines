@@ -14,7 +14,7 @@ dokka = { id = "org.jetbrains.dokka", version.ref = "dokka" }
 
 [versions]
 
-android-gradle-plugin = "8.2.1"
+android-gradle-plugin = "8.2.2"
 
 kotlin = "1.9.22"
 
@@ -112,6 +112,6 @@ timber = { group = "com.jakewharton.timber", name = "timber", version.ref = "tim
 
 google-playservices-base = { group = "com.google.android.gms", name = "play-services-base", version = "18.3.0" }
 
-google-playservices-location = { group = "com.google.android.gms", name = "play-services-location", version = "21.0.1" }
+google-playservices-location = { group = "com.google.android.gms", name = "play-services-location", version = "21.1.0" }
 
 google-accompanist-permissions = { group = "com.google.accompanist", name = "accompanist-permissions", version.ref = "google-accompanist" }
