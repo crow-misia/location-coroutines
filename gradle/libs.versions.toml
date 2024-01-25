@@ -50,7 +50,7 @@ dokka = "1.9.10"
 
 timber = "5.0.1"
 
-google-accompanist = "0.33.2-alpha"
+google-accompanist = "0.34.0"
 
 [libraries]
 
