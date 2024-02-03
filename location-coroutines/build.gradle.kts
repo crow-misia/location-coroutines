@@ -73,6 +73,13 @@ android {
         targetCompatibility = JavaVersion.VERSION_11
     }
 
+    packaging {
+        resources {
+            excludes.add("/META-INF/{AL2.0,LGPL2.1}")
+            excludes.add("/META-INF/LICENSE*")
+        }
+    }
+
     publishing {
         singleVariant("release") {
             withSourcesJar()
@@ -91,7 +98,9 @@ kotlin {
 }
 
 dependencies {
+    implementation(platform(libs.kotlin.bom))
     implementation(libs.kotlin.stdlib)
+    implementation(platform(libs.kotlinx.coroutines.bom))
     implementation(libs.kotlinx.coroutines.android)
     implementation(libs.kotlinx.coroutines.playservices)
 
@@ -99,6 +108,21 @@ dependencies {
 
     implementation(libs.google.playservices.base)
     api(libs.google.playservices.location)
+
+
+    testImplementation(libs.kotlinx.coroutines.test)
+    testImplementation(libs.kotest.runner.junit5)
+    testImplementation(libs.kotest.assertions.core)
+    testImplementation(libs.kotest.property)
+    testImplementation(libs.mockk)
+
+    androidTestImplementation(libs.kotlinx.coroutines.test)
+    androidTestImplementation(libs.androidx.test.ext.junit.ktx)
+    androidTestImplementation(libs.androidx.test.ext.truth)
+    androidTestImplementation(libs.androidx.test.espresso.core)
+    androidTestImplementation(libs.androidx.compose.ui.test.junit4)
+    androidTestImplementation(libs.mockk.android)
+    androidTestImplementation(libs.truth)
 }
 
 val customDokkaTask by tasks.creating(DokkaTask::class) {
