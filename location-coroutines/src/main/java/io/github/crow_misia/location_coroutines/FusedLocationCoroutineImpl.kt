@@ -19,22 +19,30 @@ import android.Manifest
 import android.app.Activity
 import android.app.PendingIntent
 import android.location.Location
-import androidx.activity.ComponentActivity
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.IntentSenderRequest
-import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.RequiresPermission
-import com.google.android.gms.common.api.ApiException
 import com.google.android.gms.common.api.ResolvableApiException
-import com.google.android.gms.location.*
+import com.google.android.gms.location.CurrentLocationRequest
+import com.google.android.gms.location.DeviceOrientation
+import com.google.android.gms.location.DeviceOrientationListener
+import com.google.android.gms.location.DeviceOrientationRequest
+import com.google.android.gms.location.FusedLocationProviderClient
+import com.google.android.gms.location.GeofencingClient
+import com.google.android.gms.location.GeofencingRequest
+import com.google.android.gms.location.LastLocationRequest
+import com.google.android.gms.location.LocationListener
+import com.google.android.gms.location.LocationRequest
+import com.google.android.gms.location.LocationSettingsRequest
+import com.google.android.gms.location.LocationSettingsResponse
+import com.google.android.gms.location.SettingsClient
 import com.google.android.gms.tasks.CancellationTokenSource
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.channels.ProducerScope
 import kotlinx.coroutines.channels.awaitClose
-import kotlinx.coroutines.channels.trySendBlocking
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.callbackFlow
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.flow.channelFlow
 import kotlinx.coroutines.tasks.await
 import java.util.concurrent.Executors
 
@@ -45,6 +53,10 @@ internal class FusedLocationCoroutineImpl(
 ) : FusedLocationCoroutine {
     override suspend fun checkLocationSettings(request: LocationSettingsRequest): LocationSettingsResponse {
         return settings.value.checkLocationSettings(request).await()
+    }
+
+    override suspend fun isGoogleLocationAccuracyEnabled(): Boolean {
+        return settings.value.isGoogleLocationAccuracyEnabled().await()
     }
 
     override fun checkLocationSettings(
@@ -106,10 +118,10 @@ internal class FusedLocationCoroutineImpl(
     }
 
     @RequiresPermission(anyOf = [Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.ACCESS_FINE_LOCATION])
-    override fun getLocationUpdates(request: LocationRequest): Flow<Location> = callbackFlow {
+    override fun getLocationUpdates(request: LocationRequest): Flow<Location> = channelFlow {
         val executor = Executors.newSingleThreadExecutor()
         val listener = LocationListener {
-            trySendBlocking(it)
+            trySend(it)
         }
 
         val provider = locationProvider.value
@@ -122,6 +134,10 @@ internal class FusedLocationCoroutineImpl(
         }
     }
 
+    override suspend fun flushLocations() {
+        locationProvider.value.flushLocations().await()
+    }
+
     @RequiresPermission(anyOf = [Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.ACCESS_FINE_LOCATION])
     override suspend fun setMockMode(isMockMode: Boolean) {
         locationProvider.value.setMockMode(isMockMode).await()
@@ -132,8 +148,22 @@ internal class FusedLocationCoroutineImpl(
         locationProvider.value.setMockLocation(mockLocation).await()
     }
 
-    override suspend fun flushLocations() {
-        locationProvider.value.flushLocations().await()
+    override suspend fun requestDeviceOrientationUpdates(
+        request: DeviceOrientationRequest,
+    ): Flow<DeviceOrientation> = channelFlow {
+        val executor = Executors.newSingleThreadExecutor()
+        val listener = DeviceOrientationListener {
+            trySend(it)
+        }
+
+        val provider = locationProvider.value
+        provider.requestDeviceOrientationUpdates(request, executor, listener).await()
+        awaitClose {
+            provider.removeDeviceOrientationUpdates(listener)
+                .addOnCompleteListener {
+                    executor.shutdownNow()
+                }
+        }
     }
 
     @RequiresPermission(anyOf = [Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.ACCESS_FINE_LOCATION])

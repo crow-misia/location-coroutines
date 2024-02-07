@@ -20,10 +20,12 @@ import android.app.Activity
 import android.app.PendingIntent
 import android.content.Context
 import android.location.Location
-import androidx.annotation.RequiresPermission
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.IntentSenderRequest
+import androidx.annotation.RequiresPermission
 import com.google.android.gms.location.CurrentLocationRequest
+import com.google.android.gms.location.DeviceOrientation
+import com.google.android.gms.location.DeviceOrientationRequest
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.GeofencingClient
 import com.google.android.gms.location.GeofencingRequest
@@ -68,6 +70,8 @@ interface FusedLocationCoroutine {
 
     suspend fun checkLocationSettings(request: LocationSettingsRequest): LocationSettingsResponse
 
+    suspend fun isGoogleLocationAccuracyEnabled(): Boolean
+
     fun checkLocationSettings(
         request: LocationSettingsRequest,
         activity: Activity,
@@ -93,13 +97,15 @@ interface FusedLocationCoroutine {
     @RequiresPermission(anyOf = [Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.ACCESS_FINE_LOCATION])
     fun getLocationUpdates(request: LocationRequest): Flow<Location>
 
+    suspend fun flushLocations()
+
     @RequiresPermission(anyOf = [Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.ACCESS_FINE_LOCATION])
     suspend fun setMockMode(isMockMode: Boolean)
 
     @RequiresPermission(anyOf = [Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.ACCESS_FINE_LOCATION])
     suspend fun setMockLocation(mockLocation: Location)
 
-    suspend fun flushLocations()
+    suspend fun requestDeviceOrientationUpdates(request: DeviceOrientationRequest): Flow<DeviceOrientation>
 
     suspend fun addGeofences(request: GeofencingRequest, pendingIntent: PendingIntent)
 
@@ -112,7 +118,7 @@ suspend inline fun FusedLocationCoroutine.checkLocationSettings(request: Locatio
     return checkLocationSettings { addLocationRequest(request) }
 }
 
-suspend inline fun FusedLocationCoroutine.checkLocationSettings(
+fun FusedLocationCoroutine.checkLocationSettings(
     request: LocationRequest,
     activity: Activity,
     requestCode: Int,
@@ -120,7 +126,7 @@ suspend inline fun FusedLocationCoroutine.checkLocationSettings(
     return checkLocationSettings(activity, requestCode) { addLocationRequest(request) }
 }
 
-suspend inline fun FusedLocationCoroutine.checkLocationSettings(
+fun FusedLocationCoroutine.checkLocationSettings(
     request: LocationRequest,
     launcher: ActivityResultLauncher<IntentSenderRequest>,
 ): Flow<LocationSettingsResponse> {
@@ -138,7 +144,11 @@ inline fun FusedLocationCoroutine.checkLocationSettings(
     requestCode: Int,
     builder: LocationSettingsRequest.Builder.() -> Unit,
 ): Flow<LocationSettingsResponse> {
-    return checkLocationSettings(LocationSettingsRequest.Builder().apply(builder).build(), activity, requestCode)
+    return checkLocationSettings(
+        LocationSettingsRequest.Builder().apply(builder).build(),
+        activity,
+        requestCode
+    )
 }
 
 inline fun FusedLocationCoroutine.checkLocationSettings(
@@ -155,7 +165,8 @@ inline fun FusedLocationCoroutine.getLocationUpdates(
     block: LocationRequest.Builder.() -> Unit = { },
 ): Flow<Location> {
     return getLocationUpdates(
-        request = LocationRequest.Builder(priority, interval.inWholeMilliseconds).apply(block).build(),
+        request = LocationRequest.Builder(priority, interval.inWholeMilliseconds).apply(block)
+            .build(),
     )
 }
 
@@ -174,14 +185,27 @@ inline fun FusedLocationCoroutine.getLocationUpdates(
 suspend inline fun FusedLocationCoroutine.getCurrentLocation(
     block: CurrentLocationRequest.Builder.() -> Unit = { },
 ): Location? {
-    return getCurrentLocation(CurrentLocationRequest.Builder().apply(block).build())
+    return getCurrentLocation(
+        request = CurrentLocationRequest.Builder().apply(block).build(),
+    )
 }
 
 @RequiresPermission(anyOf = [Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.ACCESS_FINE_LOCATION])
 suspend inline fun FusedLocationCoroutine.getLastLocation(
     block: LastLocationRequest.Builder.() -> Unit = { },
 ): Location? {
-    return getLastLocation(LastLocationRequest.Builder().apply(block).build())
+    return getLastLocation(
+        request = LastLocationRequest.Builder().apply(block).build(),
+    )
+}
+
+suspend inline fun FusedLocationCoroutine.requestDeviceOrientationUpdates(
+    samplingPeriodMicros: Long,
+    block: DeviceOrientationRequest.Builder.() -> Unit = { },
+): Flow<DeviceOrientation> {
+    return requestDeviceOrientationUpdates(
+        request = DeviceOrientationRequest.Builder(samplingPeriodMicros).apply(block).build(),
+    )
 }
 
 suspend inline fun FusedLocationCoroutine.addGeofences(
