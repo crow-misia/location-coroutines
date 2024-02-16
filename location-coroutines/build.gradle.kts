@@ -102,13 +102,11 @@ dependencies {
     implementation(libs.kotlin.stdlib)
     implementation(platform(libs.kotlinx.coroutines.bom))
     implementation(libs.kotlinx.coroutines.android)
-    implementation(libs.kotlinx.coroutines.playservices)
+    compileOnly(libs.kotlinx.coroutines.playservices)
 
-    implementation(libs.androidx.activity)
+    compileOnly(libs.androidx.activity)
 
-    implementation(libs.google.playservices.base)
-    api(libs.google.playservices.location)
-
+    compileOnly(libs.google.playservices.location)
 
     testImplementation(libs.kotlinx.coroutines.test)
     testImplementation(libs.kotest.runner.junit5)

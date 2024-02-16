@@ -17,6 +17,8 @@ Add dependencies (you can also add other modules that you need):
 ```groovy
 dependencies {
     implementation "io.github.crow-misia.location-coroutines:location-coroutines:${latest.version}"
+    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-play-services" (optional)
+    implementation "com.google.android.gms:play-services-location" (optional)
 }
 ```
 

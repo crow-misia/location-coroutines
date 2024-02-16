@@ -132,8 +132,6 @@ truth = { group = "com.google.truth", name = "truth", version.ref = "truth" }
 
 timber = { group = "com.jakewharton.timber", name = "timber", version.ref = "timber" }
 
-google-playservices-base = { group = "com.google.android.gms", name = "play-services-base", version = "18.3.0" }
-
 google-playservices-location = { group = "com.google.android.gms", name = "play-services-location", version = "21.1.0" }
 
 google-accompanist-permissions = { group = "com.google.accompanist", name = "accompanist-permissions", version.ref = "google-accompanist" }
