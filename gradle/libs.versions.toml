@@ -30,13 +30,13 @@ androidx-compose-compiler = "1.5.10"
 
 androidx-compose-material3 = "1.2.0"
 
-androidx-compose-runtime = "1.7.0-alpha02"
+androidx-compose-runtime = "1.7.0-alpha03"
 
-androidx-compose-ui = "1.7.0-alpha02"
+androidx-compose-ui = "1.7.0-alpha03"
 
-androidx-lifecycle = "2.8.0-alpha01"
+androidx-lifecycle = "2.8.0-alpha02"
 
-androidx-navigation = "2.8.0-alpha02"
+androidx-navigation = "2.8.0-alpha03"
 
 androidx-test-ext-junit = "1.2.0-alpha03"
 
