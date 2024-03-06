@@ -28,15 +28,15 @@ androidx-appcompat = "1.7.0-alpha03"
 
 androidx-compose-compiler = "1.5.10"
 
-androidx-compose-material3 = "1.2.0"
+androidx-compose-material3 = "1.2.1"
 
-androidx-compose-runtime = "1.7.0-alpha03"
+androidx-compose-runtime = "1.7.0-alpha04"
 
-androidx-compose-ui = "1.7.0-alpha03"
+androidx-compose-ui = "1.7.0-alpha04"
 
 androidx-lifecycle = "2.8.0-alpha02"
 
-androidx-navigation = "2.8.0-alpha03"
+androidx-navigation = "2.8.0-alpha04"
 
 androidx-test-ext-junit = "1.2.0-alpha03"
 
@@ -132,6 +132,6 @@ truth = { group = "com.google.truth", name = "truth", version.ref = "truth" }
 
 timber = { group = "com.jakewharton.timber", name = "timber", version.ref = "timber" }
 
-google-playservices-location = { group = "com.google.android.gms", name = "play-services-location", version = "21.1.0" }
+google-playservices-location = { group = "com.google.android.gms", name = "play-services-location", version = "21.2.0" }
 
 google-accompanist-permissions = { group = "com.google.accompanist", name = "accompanist-permissions", version.ref = "google-accompanist" }
