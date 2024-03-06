@@ -148,6 +148,7 @@ internal class FusedLocationCoroutineImpl(
         locationProvider.value.setMockLocation(mockLocation).await()
     }
 
+    @Deprecated(message = "use FusedDeviceOrientationCoroutine#getOrientationUpdates")
     override suspend fun requestDeviceOrientationUpdates(
         request: DeviceOrientationRequest,
     ): Flow<DeviceOrientation> = channelFlow {

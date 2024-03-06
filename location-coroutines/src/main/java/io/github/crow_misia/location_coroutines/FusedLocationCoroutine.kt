@@ -105,6 +105,7 @@ interface FusedLocationCoroutine {
     @RequiresPermission(anyOf = [Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.ACCESS_FINE_LOCATION])
     suspend fun setMockLocation(mockLocation: Location)
 
+    @Deprecated(message = "use FusedDeviceOrientationCoroutine#getOrientationUpdates")
     suspend fun requestDeviceOrientationUpdates(request: DeviceOrientationRequest): Flow<DeviceOrientation>
 
     suspend fun addGeofences(request: GeofencingRequest, pendingIntent: PendingIntent)
@@ -199,6 +200,7 @@ suspend inline fun FusedLocationCoroutine.getLastLocation(
     )
 }
 
+@Deprecated(message = "use FusedDeviceOrientationCoroutine#getOrientationUpdates")
 suspend inline fun FusedLocationCoroutine.requestDeviceOrientationUpdates(
     samplingPeriodMicros: Long,
     block: DeviceOrientationRequest.Builder.() -> Unit = { },
