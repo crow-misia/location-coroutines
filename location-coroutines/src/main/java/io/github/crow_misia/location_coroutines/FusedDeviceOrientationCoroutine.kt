@@ -26,7 +26,9 @@ interface FusedDeviceOrientationCoroutine {
     companion object {
         fun from(context: Context): FusedDeviceOrientationCoroutine {
             return from(
-                orientationProvider = lazy { LocationServices.getFusedOrientationProviderClient(context.applicationContext) },
+                orientationProvider = lazy {
+                    LocationServices.getFusedOrientationProviderClient(context.applicationContext)
+                },
             )
         }
 
