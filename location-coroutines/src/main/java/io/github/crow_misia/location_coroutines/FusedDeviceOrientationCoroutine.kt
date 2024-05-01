@@ -45,10 +45,10 @@ interface FusedDeviceOrientationCoroutine {
         }
     }
 
-    suspend fun getOrientationUpdates(request: DeviceOrientationRequest): Flow<DeviceOrientation>
+    fun getOrientationUpdates(request: DeviceOrientationRequest): Flow<DeviceOrientation>
 }
 
-suspend inline fun FusedDeviceOrientationCoroutine.getOrientationUpdates(
+inline fun FusedDeviceOrientationCoroutine.getOrientationUpdates(
     samplingPeriodMicros: Long,
     block: DeviceOrientationRequest.Builder.() -> Unit = { },
 ): Flow<DeviceOrientation> {

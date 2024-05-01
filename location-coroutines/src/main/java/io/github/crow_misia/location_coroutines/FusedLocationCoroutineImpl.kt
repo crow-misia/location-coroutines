@@ -148,25 +148,6 @@ internal class FusedLocationCoroutineImpl(
         locationProvider.value.setMockLocation(mockLocation).await()
     }
 
-    @Deprecated(message = "use FusedDeviceOrientationCoroutine#getOrientationUpdates")
-    override suspend fun requestDeviceOrientationUpdates(
-        request: DeviceOrientationRequest,
-    ): Flow<DeviceOrientation> = channelFlow {
-        val executor = Executors.newSingleThreadExecutor()
-        val listener = DeviceOrientationListener {
-            trySend(it)
-        }
-
-        val provider = locationProvider.value
-        provider.requestDeviceOrientationUpdates(request, executor, listener).await()
-        awaitClose {
-            provider.removeDeviceOrientationUpdates(listener)
-                .addOnCompleteListener {
-                    executor.shutdownNow()
-                }
-        }
-    }
-
     @RequiresPermission(anyOf = [Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.ACCESS_FINE_LOCATION])
     override suspend fun addGeofences(request: GeofencingRequest, pendingIntent: PendingIntent) {
         geofencing.value.addGeofences(request, pendingIntent).await()

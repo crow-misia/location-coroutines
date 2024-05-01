@@ -28,7 +28,7 @@ import java.util.concurrent.Executors
 internal class FusedDeviceOrientationCoroutineImpl(
     private val orientationProvider: Lazy<FusedOrientationProviderClient>,
 ) : FusedDeviceOrientationCoroutine {
-    override suspend fun getOrientationUpdates(
+    override fun getOrientationUpdates(
         request: DeviceOrientationRequest,
     ): Flow<DeviceOrientation> = channelFlow {
         val executor = Executors.newSingleThreadExecutor()
