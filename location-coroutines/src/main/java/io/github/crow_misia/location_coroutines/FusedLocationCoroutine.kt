@@ -24,8 +24,6 @@ import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.IntentSenderRequest
 import androidx.annotation.RequiresPermission
 import com.google.android.gms.location.CurrentLocationRequest
-import com.google.android.gms.location.DeviceOrientation
-import com.google.android.gms.location.DeviceOrientationRequest
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.GeofencingClient
 import com.google.android.gms.location.GeofencingRequest
