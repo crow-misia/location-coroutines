@@ -13,36 +13,43 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package io.github.crow_misia.location_coroutines
 
+import android.app.Activity
+import android.content.Context
 import com.google.android.gms.location.DeviceOrientation
 import com.google.android.gms.location.DeviceOrientationListener
 import com.google.android.gms.location.DeviceOrientationRequest
 import com.google.android.gms.location.FusedOrientationProviderClient
+import com.google.android.gms.location.LocationServices
 import kotlinx.coroutines.channels.awaitClose
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.channelFlow
+import kotlinx.coroutines.flow.callbackFlow
 import kotlinx.coroutines.tasks.await
 import java.util.concurrent.Executors
 
-internal class FusedDeviceOrientationCoroutineImpl(
-    private val orientationProvider: Lazy<FusedOrientationProviderClient>,
-) : FusedDeviceOrientationCoroutine {
-    override fun getOrientationUpdates(
-        request: DeviceOrientationRequest,
-    ): Flow<DeviceOrientation> = channelFlow {
+class FusedDeviceOrientationAdapter(
+    private val client: FusedOrientationProviderClient,
+) : DeviceOrientationAdapter<DeviceOrientationRequest, DeviceOrientation> {
+    constructor(context: Context) : this(LocationServices.getFusedOrientationProviderClient(context))
+
+    constructor(activity: Activity) : this(
+        LocationServices.getFusedOrientationProviderClient(
+            activity
+        )
+    )
+
+    override fun getOrientationUpdates(request: DeviceOrientationRequest) = callbackFlow {
         val executor = Executors.newSingleThreadExecutor()
-        val listener = DeviceOrientationListener {
+        val callback = DeviceOrientationListener {
             trySend(it)
         }
 
-        val provider = orientationProvider.value
-        provider.requestOrientationUpdates(request, executor, listener).await()
+        client.requestOrientationUpdates(request, executor, callback).await()
+
         awaitClose {
-            provider.removeOrientationUpdates(listener)
-                .addOnCompleteListener {
-                    executor.shutdownNow()
-                }
+            client.removeOrientationUpdates(callback)
+            executor.shutdown()
         }
     }
 }

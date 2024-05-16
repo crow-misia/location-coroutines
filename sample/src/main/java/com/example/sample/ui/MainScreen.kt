@@ -1,16 +1,13 @@
 package com.example.sample.ui
 
-import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import android.provider.Settings
-import androidx.activity.compose.rememberLauncherForActivityResult
-import androidx.activity.result.contract.ActivityResultContracts
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.material3.Button
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -21,21 +18,14 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.tooling.preview.Preview
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import com.google.accompanist.permissions.rememberMultiplePermissionsState
-import io.github.crow_misia.location_coroutines.toPlainString
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.launchIn
-import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.flow.mapNotNull
-import kotlinx.coroutines.flow.onCompletion
 import kotlinx.coroutines.flow.onEach
-import kotlinx.coroutines.flow.onStart
-import kotlinx.coroutines.flow.take
 import kotlinx.coroutines.launch
 
 @Composable
@@ -43,54 +33,59 @@ fun MainScreen() {
     val context = LocalContext.current
     val repository = MainRepository(context)
     val composableScope = rememberCoroutineScope()
-    var measureState by remember { mutableIntStateOf(0) }
-    var state by remember { mutableStateOf("") }
-    var job by remember { mutableStateOf<Job?>(null) }
+    var fusedLocation by remember { mutableStateOf("") }
+    var nativeLocation by remember { mutableStateOf("") }
+    var fusedOrientation by remember { mutableStateOf("") }
+    var nativeOrientation by remember { mutableStateOf("") }
 
-    val locationSettingsLauncher = rememberLauncherForActivityResult(ActivityResultContracts.StartIntentSenderForResult()) {
-        if (it.resultCode == Activity.RESULT_OK) {
-            // 測位処理を開始する
-            measureState++
-        } else {
-            // 使用しないを選択されても、再度ダイアログを出す場合は、インクリメント、出さない場合は0をセットする
-            measureState++
-        }
-    }
-
-    LaunchedEffect(measureState) {
-        job?.cancel()
-        job = composableScope.launch {
-            val flow = when (measureState) {
-                1 -> repository.checkLocationSettings(locationSettingsLauncher)
-                    .take(1)
-                    .mapNotNull { it.locationSettingsStates?.toPlainString() }
-                    .onCompletion { measureState = 0 }
-                2 -> repository.startFusedFetchLocation()
-                    .map { it.toString() }
-                3 -> repository.startNetworkFetchLocation()
-                    .map { it.toString() }
-                else -> null
-            } ?: return@launch
-
-            flow.onEach {
-                state = it
-            }.onStart {
-                state = ""
-            }.launchIn(this)
-        }
-    }
-
-    Row(
+    Column(
         modifier = Modifier.fillMaxSize(),
-        verticalAlignment = Alignment.CenterVertically,
-        horizontalArrangement = Arrangement.Center,
     ) {
-        Text(measureState.toString())
+        Row(Modifier.fillMaxWidth()) {
+            Text("fusedLocation:")
+            Text(fusedLocation)
+        }
+        Row(Modifier.fillMaxWidth()) {
+            Text("nativeLocation:")
+            Text(nativeLocation)
+        }
+        Row(Modifier.fillMaxWidth()) {
+            Text("fusedOrientation:")
+            Text(fusedOrientation)
+        }
+        Row(Modifier.fillMaxWidth()) {
+            Text("nativeOrientation:")
+            Text(nativeOrientation)
+        }
         MainContent(
-            state = state,
-            measurementState = measureState > 0,
-            onStart = { measureState = it },
-            onStop = { measureState = 0 },
+            onStartFusedLocation = {
+                composableScope.launch(Dispatchers.Default) {
+                    repository.startFusedLocation().onEach {
+                        fusedLocation = it.toString()
+                    }.launchIn(this)
+                }
+            },
+            onStartNativeLocation = {
+                composableScope.launch(Dispatchers.Default) {
+                    repository.startNativeLocation().onEach {
+                        nativeLocation = it.toString()
+                    }.launchIn(this)
+                }
+            },
+            onStartFusedOrientation = {
+                composableScope.launch(Dispatchers.Default) {
+                    repository.startFusedOrientation().onEach {
+                        fusedOrientation = it.toString()
+                    }.launchIn(this)
+                }
+            },
+            onStartNativeOrientation = {
+                composableScope.launch(Dispatchers.Default) {
+                    repository.startNativeOrientation().onEach {
+                        nativeOrientation = it.toString()
+                    }.launchIn(this)
+                }
+            },
             navigateToSettingsScreen = {
                 context.openSettings()
             }
@@ -99,73 +94,120 @@ fun MainScreen() {
 }
 
 @OptIn(ExperimentalPermissionsApi::class)
-@Preview
 @Composable
 fun MainContent(
-    state: String = "xxxx",
-    measurementState: Boolean = false,
-    onStart: (state: Int) -> Unit = {},
-    onStop: () -> Unit = {},
-    navigateToSettingsScreen: () -> Unit = {}
+    onStartFusedLocation: () -> Job,
+    onStartNativeLocation: () -> Job,
+    onStartFusedOrientation: () -> Job,
+    onStartNativeOrientation: () -> Job,
+    navigateToSettingsScreen: () -> Unit,
 ) {
-    var permissionStateCount by remember { mutableIntStateOf(0) }
+    var fusedLocationJob by remember { mutableStateOf<Job?>(null) }
+    var fusedOrientationJob by remember { mutableStateOf<Job?>(null) }
+    var nativeLocationJob by remember { mutableStateOf<Job?>(null) }
+    var nativeOrientationJob by remember { mutableStateOf<Job?>(null) }
+
+    var locationStartType by remember { mutableIntStateOf(0) }
     val permissionState = rememberMultiplePermissionsState(listOf(
         android.Manifest.permission.ACCESS_COARSE_LOCATION,
         android.Manifest.permission.ACCESS_FINE_LOCATION
     ))
 
-    LaunchedEffect(permissionState, permissionStateCount) {
-        if (permissionState.allPermissionsGranted && permissionStateCount > 0) {
-            onStart(permissionStateCount)
+    LaunchedEffect(permissionState, locationStartType) {
+        if (permissionState.allPermissionsGranted && locationStartType > 0) {
+            when (locationStartType) {
+                1 -> {
+                    fusedLocationJob = onStartFusedLocation()
+                }
+                2 -> {
+                    nativeLocationJob = onStartNativeLocation()
+                }
+            }
         }
     }
 
     when {
         permissionState.allPermissionsGranted -> Unit
         permissionState.shouldShowRationale -> {
-            Column {
-                Text("permission is required")
-            }
+            Text("permission is required")
         }
         else -> {
-            Column {
+            Row {
                 Text("permission denied:" + permissionState.revokedPermissions.size)
-            }
-            Button(onClick = navigateToSettingsScreen) {
-                Text("Open Settings")
+                Button(onClick = navigateToSettingsScreen) {
+                    Text("Open Settings")
+                }
             }
         }
     }
 
-    Column {
-        if (measurementState) {
+    Row {
+        fusedLocationJob?.also {
             Button(onClick = {
-                permissionStateCount = 0
-                onStop()
+                fusedLocationJob = null
+                locationStartType = 0
+                it.cancel()
             }) {
-                Text(text = "Stop")
+                Text(text = "Stop Fused Location")
             }
-            Text(text = state)
-        } else {
-            Button(onClick = {
-                permissionState.launchMultiplePermissionRequest()
-                permissionStateCount = 1
-            }) {
-                Text(text = "Get Settings")
-            }
+        } ?: run {
             Button(onClick = {
                 permissionState.launchMultiplePermissionRequest()
-                permissionStateCount = 2
+                locationStartType = 1
             }) {
-                Text(text = "Start Fused")
+                Text(text = "Start Fused Location")
             }
+        }
+    }
+    Row {
+        nativeLocationJob?.also {
+            Button(onClick = {
+                nativeLocationJob = null
+                locationStartType = 0
+                it.cancel()
+            }) {
+                Text(text = "Stop Native Location")
+            }
+        } ?: run {
             Button(onClick = {
                 permissionState.launchMultiplePermissionRequest()
-                permissionStateCount = 3
+                locationStartType = 2
             }) {
-                Text(text = "Start Network")
+                Text(text = "Start Native Location")
             }
-            Text(text = state)
+        }
+    }
+
+    Row {
+        fusedOrientationJob?.also {
+            Button(onClick = {
+                fusedOrientationJob = null
+                it.cancel()
+            }) {
+                Text(text = "Stop Fused Orientation")
+            }
+        } ?: run {
+            Button(onClick = {
+                fusedOrientationJob = onStartFusedOrientation()
+            }) {
+                Text(text = "Start Fused Orientation")
+            }
+        }
+    }
+    Row {
+        nativeOrientationJob?.also {
+            Button(onClick = {
+                nativeOrientationJob = null
+                it.cancel()
+            }) {
+                Text(text = "Stop Native Orientation")
+            }
+        } ?: run {
+            Button(onClick = {
+                nativeOrientationJob = onStartNativeOrientation()
+            }) {
+                Text(text = "Start Native Orientation")
+            }
         }
     }
 }

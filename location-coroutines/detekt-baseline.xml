@@ -1,0 +1,8 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<SmellBaseline>
+  <ManuallySuppressedIssues/>
+  <CurrentIssues>
+    <ID>MagicNumber:NativeDeviceOrientationAdapter.kt$NativeDeviceOrientationAdapter$3</ID>
+    <ID>MagicNumber:NativeDeviceOrientationAdapter.kt$NativeDeviceOrientationAdapter$9</ID>
+  </CurrentIssues>
+</SmellBaseline>
