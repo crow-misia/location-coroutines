@@ -31,9 +31,11 @@ class MainRepository(context: Context) {
     @SuppressLint("MissingPermission")
     fun startFusedLocation(): Flow<Location> {
         return fusedLocationAdapter.getLocations {
-            LocationRequest.Builder(Priority.PRIORITY_BALANCED_POWER_ACCURACY, 1000L)
+            LocationRequest.Builder(Priority.PRIORITY_HIGH_ACCURACY, 1000L)
+                .setMinUpdateIntervalMillis(100L)
                 .setWaitForAccurateLocation(true)
-                .setGranularity(Granularity.GRANULARITY_FINE)
+                .setMaxUpdateAgeMillis(0L)
+                .setGranularity(Granularity.GRANULARITY_PERMISSION_LEVEL)
                 .build()
         }
     }
