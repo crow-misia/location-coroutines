@@ -4,9 +4,10 @@ import org.jetbrains.kotlin.gradle.dsl.KotlinVersion
 
 plugins {
     alias(libs.plugins.android.library)
+    alias(libs.plugins.kotlin.android)
+    alias(libs.plugins.kotlinx.kover)
     alias(libs.plugins.dokka)
     alias(libs.plugins.detekt)
-    alias(libs.plugins.kotlin.android)
     id("signing")
     id("maven-publish")
 }
