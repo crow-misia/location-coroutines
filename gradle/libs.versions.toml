@@ -16,7 +16,7 @@ dokka = { id = "org.jetbrains.dokka", version.ref = "dokka" }
 
 [versions]
 
-android-gradle-plugin = "8.4.0"
+android-gradle-plugin = "8.4.1"
 
 kotlin = "1.9.24"
 
@@ -60,7 +60,7 @@ dokka = "1.9.20"
 
 timber = "5.0.1"
 
-google-accompanist = "0.35.0-alpha"
+google-accompanist = "0.35.1-alpha"
 
 [libraries]
 
