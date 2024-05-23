@@ -59,16 +59,16 @@ class FusedLocationAdapter(
 }
 
 private fun LocationRequest.asFusedRequest(): com.google.android.gms.location.LocationRequest {
-    return com.google.android.gms.location.LocationRequest.Builder(interval.inWholeMilliseconds).also {
-        it.setPriority(priority.asFusedPriority())
-        it.setGranularity(granularity.asFusedGranularity())
-        it.setWaitForAccurateLocation(waitForAccurateLocation)
-        duration?.apply { it.setDurationMillis(inWholeMilliseconds) }
-        maxUpdates?.apply { it.setMaxUpdates(this) }
-        maxUpdateAge?.apply { it.setMaxUpdateAgeMillis(inWholeMilliseconds) }
-        maxUpdateDelay?.apply { it.setMaxUpdateDelayMillis(inWholeMilliseconds) }
-        minUpdateInterval?.apply { it.setMinUpdateIntervalMillis(inWholeMilliseconds) }
-        minUpdateDistanceMeters?.apply { it.setMinUpdateDistanceMeters(this) }
+    return com.google.android.gms.location.LocationRequest.Builder(interval.inWholeMilliseconds).also { builder ->
+        builder.setPriority(priority.asFusedPriority())
+        builder.setGranularity(granularity.asFusedGranularity())
+        builder.setWaitForAccurateLocation(waitForAccurateLocation)
+        duration?.also { builder.setDurationMillis(it.inWholeMilliseconds) }
+        maxUpdates?.also { builder.setMaxUpdates(it) }
+        maxUpdateAge?.also { builder.setMaxUpdateAgeMillis(it.inWholeMilliseconds) }
+        maxUpdateDelay?.also { builder.setMaxUpdateDelayMillis(it.inWholeMilliseconds) }
+        minUpdateInterval?.also { builder.setMinUpdateIntervalMillis(it.inWholeMilliseconds) }
+        minUpdateDistanceMeters?.also { builder.setMinUpdateDistanceMeters(it) }
     }.build()
 }
 

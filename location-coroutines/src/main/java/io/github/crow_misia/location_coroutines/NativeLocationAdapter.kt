@@ -64,13 +64,13 @@ class NativeLocationAdapter(
     }
 
     private fun LocationRequest.asNativeRequest(): LocationRequestCompat {
-        return LocationRequestCompat.Builder(interval.inWholeMilliseconds).also {
-            priority.setQuality(it)
-            duration?.apply { it.setDurationMillis(inWholeMilliseconds) }
-            maxUpdates?.apply { it.setMaxUpdates(this) }
-            maxUpdateDelay?.apply { it.setMaxUpdateDelayMillis(inWholeMilliseconds) }
-            minUpdateInterval?.apply { it.setMinUpdateIntervalMillis(inWholeMilliseconds) }
-            minUpdateDistanceMeters?.apply { it.setMinUpdateDistanceMeters(this) }
+        return LocationRequestCompat.Builder(interval.inWholeMilliseconds).also { builder ->
+            priority.setQuality(builder)
+            duration?.also { builder.setDurationMillis(it.inWholeMilliseconds) }
+            maxUpdates?.also { builder.setMaxUpdates(it) }
+            maxUpdateDelay?.also { builder.setMaxUpdateDelayMillis(it.inWholeMilliseconds) }
+            minUpdateInterval?.also { builder.setMinUpdateIntervalMillis(it.inWholeMilliseconds) }
+            minUpdateDistanceMeters?.also { builder.setMinUpdateDistanceMeters(it) }
         }.build()
     }
 
