@@ -51,6 +51,7 @@ class FusedDeviceOrientationAdapter(
     }
 
     private fun DeviceOrientationRequest.asFusedRequest(): com.google.android.gms.location.DeviceOrientationRequest {
-        return com.google.android.gms.location.DeviceOrientationRequest.Builder(samplingPeriod.inWholeMicroseconds).build()
+        return com.google.android.gms.location.DeviceOrientationRequest.Builder(samplingPeriod.inWholeMicroseconds)
+            .build()
     }
 }
