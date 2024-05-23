@@ -20,7 +20,6 @@ import android.app.Activity
 import android.content.Context
 import com.google.android.gms.location.DeviceOrientation
 import com.google.android.gms.location.DeviceOrientationListener
-import com.google.android.gms.location.DeviceOrientationRequest
 import com.google.android.gms.location.FusedOrientationProviderClient
 import com.google.android.gms.location.LocationServices
 import kotlinx.coroutines.channels.awaitClose
@@ -30,13 +29,11 @@ import java.util.concurrent.Executors
 
 class FusedDeviceOrientationAdapter(
     private val client: FusedOrientationProviderClient,
-) : DeviceOrientationAdapter<DeviceOrientationRequest, DeviceOrientation> {
+) : DeviceOrientationAdapter<DeviceOrientation> {
     constructor(context: Context) : this(LocationServices.getFusedOrientationProviderClient(context))
 
     constructor(activity: Activity) : this(
-        LocationServices.getFusedOrientationProviderClient(
-            activity
-        )
+        LocationServices.getFusedOrientationProviderClient(activity)
     )
 
     override fun getOrientationUpdates(request: DeviceOrientationRequest) = callbackFlow {
@@ -45,11 +42,15 @@ class FusedDeviceOrientationAdapter(
             trySend(it)
         }
 
-        client.requestOrientationUpdates(request, executor, callback).await()
+        client.requestOrientationUpdates(request.asFusedRequest(), executor, callback).await()
 
         awaitClose {
             client.removeOrientationUpdates(callback)
             executor.shutdown()
         }
+    }
+
+    private fun DeviceOrientationRequest.asFusedRequest(): com.google.android.gms.location.DeviceOrientationRequest {
+        return com.google.android.gms.location.DeviceOrientationRequest.Builder(samplingPeriod.inWholeMicroseconds).build()
     }
 }

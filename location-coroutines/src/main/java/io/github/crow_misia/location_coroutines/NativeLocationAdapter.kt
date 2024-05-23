@@ -30,7 +30,7 @@ import java.util.concurrent.Executors
 class NativeLocationAdapter(
     private val manager: LocationManager,
     private val provider: String,
-) : LocationAdapter<LocationRequestCompat> {
+) : LocationAdapter {
     constructor(
         context: Context,
         provider: String,
@@ -48,18 +48,41 @@ class NativeLocationAdapter(
             "android.permission.ACCESS_FINE_LOCATION",
         ],
     )
-    override fun getLocations(request: LocationRequestCompat) = callbackFlow {
+    override fun getLocations(request: LocationRequest) = callbackFlow {
         val executor = Executors.newSingleThreadExecutor()
         val listener = LocationListenerCompat {
             trySend(it)
         }
         LocationManagerCompat.requestLocationUpdates(
-            manager, provider, request, executor, listener,
+            manager, provider, request.asNativeRequest(), executor, listener,
         )
 
         awaitClose {
             LocationManagerCompat.removeUpdates(manager, listener)
             executor.shutdownNow()
+        }
+    }
+
+    private fun LocationRequest.asNativeRequest(): LocationRequestCompat {
+        return LocationRequestCompat.Builder(interval.inWholeMilliseconds).also {
+            priority.setQuality(it)
+            duration?.apply { it.setDurationMillis(inWholeMilliseconds) }
+            maxUpdates?.apply { it.setMaxUpdates(this) }
+            maxUpdateDelay?.apply { it.setMaxUpdateDelayMillis(inWholeMilliseconds) }
+            minUpdateInterval?.apply { it.setMinUpdateIntervalMillis(inWholeMilliseconds) }
+            minUpdateDistanceMeters?.apply { it.setMinUpdateDistanceMeters(this) }
+        }.build()
+    }
+
+    private fun Priority.setQuality(builder: LocationRequestCompat.Builder) {
+        when (this) {
+            Priority.HighAccuracy -> builder.setQuality(LocationRequestCompat.QUALITY_HIGH_ACCURACY)
+            Priority.BalancedPowerAccuracy -> builder.setQuality(LocationRequestCompat.QUALITY_BALANCED_POWER_ACCURACY)
+            Priority.LowPower -> builder.setQuality(LocationRequestCompat.QUALITY_LOW_POWER)
+            Priority.Passive -> {
+                builder.setQuality(LocationRequestCompat.QUALITY_BALANCED_POWER_ACCURACY)
+                builder.setIntervalMillis(LocationRequestCompat.PASSIVE_INTERVAL)
+            }
         }
     }
 }

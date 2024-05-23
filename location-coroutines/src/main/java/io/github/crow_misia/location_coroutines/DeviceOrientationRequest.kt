@@ -16,14 +16,15 @@
 
 package io.github.crow_misia.location_coroutines
 
-import kotlinx.coroutines.flow.Flow
+import kotlin.time.Duration
+import kotlin.time.Duration.Companion.milliseconds
 
-interface DeviceOrientationAdapter<RESPONSE> {
-    fun getOrientationUpdates(request: DeviceOrientationRequest): Flow<RESPONSE>
-}
-
-inline fun <RESPONSE> DeviceOrientationAdapter<RESPONSE>.getOrientationUpdates(
-    block: () -> DeviceOrientationRequest,
-): Flow<RESPONSE> {
-    return getOrientationUpdates(block())
+data class DeviceOrientationRequest(
+    val samplingPeriod: Duration = OUTPUT_PERIOD_DEFAULT,
+) {
+    companion object {
+        val OUTPUT_PERIOD_DEFAULT = 20.milliseconds
+        val OUTPUT_PERIOD_MEDIUM = 10.milliseconds
+        val OUTPUT_PERIOD_FAST = 5.milliseconds
+    }
 }

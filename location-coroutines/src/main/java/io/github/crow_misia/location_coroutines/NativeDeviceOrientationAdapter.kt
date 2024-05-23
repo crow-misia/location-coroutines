@@ -30,14 +30,14 @@ import kotlin.time.Duration
 
 class NativeDeviceOrientationAdapter(
     private val manager: SensorManager,
-) : DeviceOrientationAdapter<NativeDeviceOrientationRequest, NativeDeviceOrientation> {
+) : DeviceOrientationAdapter<NativeDeviceOrientation> {
     constructor(
         context: Context,
     ) : this(checkNotNull(context.getSystemService<SensorManager>()) {
         "unsupported SensorManager"
     })
 
-    override fun getOrientationUpdates(request: NativeDeviceOrientationRequest) = callbackFlow {
+    override fun getOrientationUpdates(request: DeviceOrientationRequest) = callbackFlow {
         val accelerometerReading = FloatArray(3)
         val magnetometerReading = FloatArray(3)
         val rotationMatrix = FloatArray(9)
@@ -101,7 +101,6 @@ class NativeDeviceOrientationAdapter(
     }
 }
 
-data class NativeDeviceOrientationRequest(val samplingPeriod: Duration)
 data class NativeDeviceOrientation(
     val azimuth: Float,
     val pitch: Float,

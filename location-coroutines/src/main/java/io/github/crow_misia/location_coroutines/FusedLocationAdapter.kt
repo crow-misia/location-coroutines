@@ -21,7 +21,6 @@ import android.content.Context
 import androidx.annotation.RequiresPermission
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationListener
-import com.google.android.gms.location.LocationRequest
 import com.google.android.gms.location.LocationServices
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.callbackFlow
@@ -30,7 +29,7 @@ import java.util.concurrent.Executors
 
 class FusedLocationAdapter(
     private val client: FusedLocationProviderClient,
-) : LocationAdapter<LocationRequest> {
+) : LocationAdapter {
     constructor(context: Context) : this(LocationServices.getFusedLocationProviderClient(context))
 
     constructor(activity: Activity) : this(LocationServices.getFusedLocationProviderClient(activity))
@@ -50,11 +49,42 @@ class FusedLocationAdapter(
         val listener = LocationListener {
             trySend(it)
         }
-        client.requestLocationUpdates(request, executor, listener).await()
+        client.requestLocationUpdates(request.asFusedRequest(), executor, listener).await()
 
         awaitClose {
             client.removeLocationUpdates(listener)
             executor.shutdownNow()
         }
+    }
+}
+
+private fun LocationRequest.asFusedRequest(): com.google.android.gms.location.LocationRequest {
+    return com.google.android.gms.location.LocationRequest.Builder(interval.inWholeMilliseconds).also {
+        it.setPriority(priority.asFusedPriority())
+        it.setGranularity(granularity.asFusedGranularity())
+        it.setWaitForAccurateLocation(waitForAccurateLocation)
+        duration?.apply { it.setDurationMillis(inWholeMilliseconds) }
+        maxUpdates?.apply { it.setMaxUpdates(this) }
+        maxUpdateAge?.apply { it.setMaxUpdateAgeMillis(inWholeMilliseconds) }
+        maxUpdateDelay?.apply { it.setMaxUpdateDelayMillis(inWholeMilliseconds) }
+        minUpdateInterval?.apply { it.setMinUpdateIntervalMillis(inWholeMilliseconds) }
+        minUpdateDistanceMeters?.apply { it.setMinUpdateDistanceMeters(this) }
+    }.build()
+}
+
+private fun Priority.asFusedPriority(): Int {
+    return when (this) {
+        Priority.HighAccuracy -> com.google.android.gms.location.Priority.PRIORITY_HIGH_ACCURACY
+        Priority.BalancedPowerAccuracy -> com.google.android.gms.location.Priority.PRIORITY_BALANCED_POWER_ACCURACY
+        Priority.LowPower -> com.google.android.gms.location.Priority.PRIORITY_LOW_POWER
+        Priority.Passive -> com.google.android.gms.location.Priority.PRIORITY_PASSIVE
+    }
+}
+
+private fun Granularity.asFusedGranularity(): Int {
+    return when (this) {
+        Granularity.Fine -> com.google.android.gms.location.Granularity.GRANULARITY_FINE
+        Granularity.Coarse -> com.google.android.gms.location.Granularity.GRANULARITY_COARSE
+        Granularity.PermissionLevel -> com.google.android.gms.location.Granularity.GRANULARITY_PERMISSION_LEVEL
     }
 }

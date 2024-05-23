@@ -20,7 +20,7 @@ import android.location.Location
 import androidx.annotation.RequiresPermission
 import kotlinx.coroutines.flow.Flow
 
-interface LocationAdapter<REQUEST> {
+interface LocationAdapter {
     suspend fun flushLocations()
 
     @RequiresPermission(
@@ -29,7 +29,7 @@ interface LocationAdapter<REQUEST> {
             "android.permission.ACCESS_FINE_LOCATION",
         ]
     )
-    fun getLocations(request: REQUEST): Flow<Location>
+    fun getLocations(request: LocationRequest): Flow<Location>
 }
 
 @RequiresPermission(
@@ -38,8 +38,8 @@ interface LocationAdapter<REQUEST> {
         "android.permission.ACCESS_FINE_LOCATION",
     ]
 )
-inline fun <REQUEST> LocationAdapter<REQUEST>.getLocations(
-    block: () -> REQUEST,
+inline fun LocationAdapter.getLocations(
+    block: () -> LocationRequest,
 ): Flow<Location> {
     return getLocations(block())
 }
