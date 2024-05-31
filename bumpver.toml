@@ -12,6 +12,6 @@ push = false
 
 [bumpver.file_patterns]
 "location-coroutines/build.gradle.kts" = [
-    'const val version = "{pep440_version}"',
+    'const val VERSION = "{pep440_version}"',
 ]
 
