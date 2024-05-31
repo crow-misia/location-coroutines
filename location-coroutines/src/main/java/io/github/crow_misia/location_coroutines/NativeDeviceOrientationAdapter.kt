@@ -26,7 +26,6 @@ import androidx.core.content.getSystemService
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.callbackFlow
-import kotlin.time.Duration
 
 class NativeDeviceOrientationAdapter(
     private val manager: SensorManager,
