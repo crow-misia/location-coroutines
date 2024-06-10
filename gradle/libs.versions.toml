@@ -10,7 +10,7 @@ kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
 
 kotlin-plugin-compose = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
 
-kotlinx-kover = { id = "org.jetbrains.kotlinx.kover", version = "0.8.0" }
+kotlinx-kover = { id = "org.jetbrains.kotlinx.kover", version = "0.8.1" }
 
 detekt = { id = "io.gitlab.arturbosch.detekt", version = "1.23.6" }
 
@@ -18,7 +18,7 @@ dokka = { id = "org.jetbrains.dokka", version.ref = "dokka" }
 
 [versions]
 
-android-gradle-plugin = "8.4.1"
+android-gradle-plugin = "8.4.2"
 
 kotlin = "2.0.0"
 
