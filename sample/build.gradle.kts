@@ -28,8 +28,8 @@ android {
     }
 
     compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_11
-        targetCompatibility = JavaVersion.VERSION_11
+        sourceCompatibility = JavaVersion.VERSION_1_8
+        targetCompatibility = JavaVersion.VERSION_1_8
     }
 
     buildFeatures {
@@ -52,9 +52,8 @@ android {
 
 kotlin {
     compilerOptions {
-        optIn.addAll("kotlin.RequiresOptIn")
         javaParameters.set(true)
-        jvmTarget.set(JvmTarget.JVM_11)
+        jvmTarget.set(JvmTarget.JVM_1_8)
     }
 }
 
