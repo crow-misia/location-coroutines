@@ -40,15 +40,15 @@ androidx-lifecycle = "2.8.2"
 
 androidx-navigation = "2.8.0-beta03"
 
-androidx-test-ext-junit = "1.2.0-rc01"
+androidx-test-ext-junit = "1.2.0"
 
-androidx-test-ext-truth = "1.6.0-rc01"
+androidx-test-ext-truth = "1.6.0"
 
-androidx-test-espresso = "3.6.0-rc01"
+androidx-test-espresso = "3.6.0"
 
-androidx-test-runner = "1.6.0-rc01"
+androidx-test-runner = "1.6.0"
 
-androidx-test-rules = "1.6.0-rc01"
+androidx-test-rules = "1.6.0"
 
 kotest = "5.9.1"
 
