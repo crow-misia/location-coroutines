@@ -10,7 +10,7 @@ kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
 
 kotlin-plugin-compose = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
 
-kotlinx-kover = { id = "org.jetbrains.kotlinx.kover", version = "0.8.1" }
+kotlinx-kover = { id = "org.jetbrains.kotlinx.kover", version = "0.8.2" }
 
 detekt = { id = "io.gitlab.arturbosch.detekt", version = "1.23.6" }
 
@@ -40,21 +40,21 @@ androidx-lifecycle = "2.8.2"
 
 androidx-navigation = "2.8.0-beta04"
 
-androidx-test-ext-junit = "1.2.0"
+androidx-test-ext-junit = "1.2.1"
 
 androidx-test-ext-truth = "1.6.0"
 
-androidx-test-espresso = "3.6.0"
+androidx-test-espresso = "3.6.1"
 
-androidx-test-runner = "1.6.0"
+androidx-test-runner = "1.6.1"
 
-androidx-test-rules = "1.6.0"
+androidx-test-rules = "1.6.1"
 
 kotest = "5.9.1"
 
 mockk = "1.13.11"
 
-truth = "1.4.2"
+truth = "1.4.3"
 
 dokka = "1.9.20"
 
