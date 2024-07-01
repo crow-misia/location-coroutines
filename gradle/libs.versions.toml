@@ -36,7 +36,7 @@ androidx-compose-runtime = "1.7.0-beta04"
 
 androidx-compose-ui = "1.7.0-beta04"
 
-androidx-lifecycle = "2.8.2"
+androidx-lifecycle = "2.8.3"
 
 androidx-navigation = "2.8.0-beta04"
 
