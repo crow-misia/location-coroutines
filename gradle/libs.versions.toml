@@ -10,7 +10,7 @@ kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
 
 kotlin-plugin-compose = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
 
-kotlinx-kover = { id = "org.jetbrains.kotlinx.kover", version = "0.8.2" }
+kotlinx-kover = { id = "org.jetbrains.kotlinx.kover", version = "0.8.3" }
 
 detekt = { id = "io.gitlab.arturbosch.detekt", version = "1.23.6" }
 
