@@ -15,7 +15,7 @@ object Maven {
     const val GROUP_ID = "io.github.crow-misia.location-coroutines"
     const val ARTIFACT_ID = "location-coroutines"
     const val NAME = "location-coroutines"
-    const val VERSION = "0.26.0"
+    const val VERSION = "0.27.0"
     const val DESC = "Coroutines function for FusesLocationProviderClient"
     const val SITE_URL = "https://github.com/crow-misia/location-coroutines"
     const val GIT_URL = "https://github.com/crow-misia/location-coroutines.git"
