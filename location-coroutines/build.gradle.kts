@@ -29,7 +29,7 @@ version = Maven.VERSION
 
 android {
     namespace = "io.github.crow_misia.location_coroutines"
-    compileSdk = 34
+    compileSdk = 35
 
     defaultConfig {
         minSdk = 21
