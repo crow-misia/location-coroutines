@@ -12,7 +12,7 @@ kotlin-plugin-compose = { id = "org.jetbrains.kotlin.plugin.compose", version.re
 
 kotlinx-kover = { id = "org.jetbrains.kotlinx.kover", version = "0.8.3" }
 
-detekt = { id = "io.gitlab.arturbosch.detekt", version = "1.23.6" }
+detekt = { id = "io.gitlab.arturbosch.detekt", version = "1.23.7" }
 
 dokka = { id = "org.jetbrains.dokka", version.ref = "dokka" }
 
