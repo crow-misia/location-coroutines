@@ -11,7 +11,7 @@ tag = true
 push = false
 
 [bumpver.file_patterns]
-"location-coroutines/build.gradle.kts" = [
+"buildSrc/src/main/java/Maven.kt" = [
     'const val VERSION = "{pep440_version}"',
 ]
 

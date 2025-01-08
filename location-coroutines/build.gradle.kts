@@ -1,28 +1,16 @@
-import org.jetbrains.dokka.gradle.DokkaTask
+import com.vanniktech.maven.publish.AndroidSingleVariantLibrary
+import com.vanniktech.maven.publish.SonatypeHost
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 
 plugins {
     alias(libs.plugins.android.library)
-    alias(libs.plugins.kotlin.android)
-    alias(libs.plugins.kotlinx.kover)
     alias(libs.plugins.dokka)
     alias(libs.plugins.dokka.javadoc)
     alias(libs.plugins.detekt)
+    alias(libs.plugins.kotlin.android)
+    alias(libs.plugins.kotlinx.kover)
+    alias(libs.plugins.maven.publish)
     id("signing")
-    id("maven-publish")
-}
-
-object Maven {
-    const val GROUP_ID = "io.github.crow-misia.location-coroutines"
-    const val ARTIFACT_ID = "location-coroutines"
-    const val NAME = "location-coroutines"
-    const val VERSION = "0.27.0"
-    const val DESC = "Coroutines function for FusesLocationProviderClient"
-    const val SITE_URL = "https://github.com/crow-misia/location-coroutines"
-    const val GIT_URL = "https://github.com/crow-misia/location-coroutines.git"
-    const val LICENSE_NAME = "The Apache Software License, Version 2.0"
-    const val LICENSE_URL = "http://www.apache.org/licenses/LICENSE-2.0.txt"
-    const val LICENSE_DIST = "repo"
 }
 
 group = Maven.GROUP_ID
@@ -30,10 +18,10 @@ version = Maven.VERSION
 
 android {
     namespace = "io.github.crow_misia.location_coroutines"
-    compileSdk = 35
+    compileSdk = Build.COMPILE_SDK
 
     defaultConfig {
-        minSdk = 21
+        minSdk = Build.MIN_SDK
         consumerProguardFiles("consumer-proguard-rules.pro")
     }
 
@@ -59,19 +47,19 @@ android {
     // Tests can be Robolectric or instrumented tests
     sourceSets {
         val sharedTestDir = "src/sharedTest/java"
-        getByName("test") {
+        named("test") {
             java.srcDir(sharedTestDir)
             kotlin.srcDir(sharedTestDir)
         }
-        getByName("androidTest") {
+        named("androidTest") {
             java.srcDir(sharedTestDir)
             kotlin.srcDir(sharedTestDir)
         }
     }
 
     compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_1_8
-        targetCompatibility = JavaVersion.VERSION_1_8
+        sourceCompatibility = Build.sourceCompatibility
+        targetCompatibility = Build.targetCompatibility
     }
 
     packaging {
@@ -80,18 +68,12 @@ android {
             excludes.add("/META-INF/LICENSE*")
         }
     }
-
-    publishing {
-        singleVariant("release") {
-            withSourcesJar()
-        }
-    }
 }
 
 kotlin {
     compilerOptions {
-        javaParameters.set(true)
-        jvmTarget.set(JvmTarget.JVM_1_8)
+        javaParameters = true
+        jvmTarget = JvmTarget.JVM_1_8
     }
 }
 
@@ -123,80 +105,46 @@ dependencies {
     androidTestImplementation(libs.truth)
 }
 
-val dokkaJavadocJar by tasks.registering(Jar::class) {
-    description = "A Javadoc JAR containing Dokka Javadoc"
-    from(tasks.dokkaGeneratePublicationJavadoc.flatMap { it.outputDirectory })
-    archiveClassifier = "javadoc"
-}
-
-publishing {
-    publications {
-        register<MavenPublication>("maven") {
-            afterEvaluate {
-                from(components.named("release").get())
-            }
-
-            groupId = Maven.GROUP_ID
-            artifactId = Maven.ARTIFACT_ID
-
-            println("""
-                |Creating maven publication
-                |    Group: $groupId
-                |    Artifact: $artifactId
-                |    Version: $version
-            """.trimMargin())
-
-            artifact(dokkaJavadocJar)
-
-            pom {
-                name.set(Maven.NAME)
-                description.set(Maven.DESC)
-                url.set(Maven.SITE_URL)
-
-                scm {
-                    val scmUrl = "scm:git:${Maven.GIT_URL}"
-                    connection = scmUrl
-                    developerConnection = scmUrl
-                    url = Maven.GIT_URL
-                    tag = "HEAD"
-                }
-
-                developers {
-                    developer {
-                        id = "crow-misia"
-                        name = "Zenichi Amano"
-                        email = "crow.misia@gmail.com"
-                        roles = listOf("Project-Administrator", "Developer")
-                        timezone = "+9"
-                    }
-                }
-
-                licenses {
-                    license {
-                        name = Maven.LICENSE_NAME
-                        url = Maven.LICENSE_URL
-                        distribution = Maven.LICENSE_DIST
-                    }
-                }
-            }
-        }
-    }
-    repositories {
-        maven {
-            val releasesRepoUrl = uri("https://oss.sonatype.org/service/local/staging/deploy/maven2")
-            val snapshotsRepoUrl = uri("https://oss.sonatype.org/content/repositories/snapshots")
-            url = if (Maven.VERSION.endsWith("SNAPSHOT")) snapshotsRepoUrl else releasesRepoUrl
-            credentials {
-                username = project.findProperty("sona.user") as String? ?: providers.environmentVariable("SONA_USER").orNull
-                password = project.findProperty("sona.password") as String? ?: providers.environmentVariable("SONA_PASSWORD").orNull
-            }
-        }
-    }
-}
-
 signing {
     useGpgCmd()
     sign(publishing.publications)
+}
+
+mavenPublishing {
+    configure(AndroidSingleVariantLibrary(
+        variant = "release",
+        publishJavadocJar = true,
+        sourcesJar = true,
+    ))
+
+    publishToMavenCentral(SonatypeHost.CENTRAL_PORTAL)
+
+    coordinates(Maven.GROUP_ID, Maven.ARTIFACT_ID, Maven.VERSION)
+
+    pom {
+        name = Maven.ARTIFACT_ID
+        description = Maven.DESCRIPTION
+        url = "https://github.com/${Maven.GITHUB_REPOSITORY}/"
+        licenses {
+            license {
+                name = Maven.LICENSE_NAME
+                url = Maven.LICENSE_URL
+                distribution = Maven.LICENSE_DIST
+            }
+        }
+        developers {
+            developer {
+                id = Maven.DEVELOPER_ID
+                name = Maven.DEVELOPER_NAME
+                email = Maven.DEVELOPER_EMAIL
+            }
+        }
+        scm {
+            url = "https://github.com/${Maven.GITHUB_REPOSITORY}/"
+            connection = "scm:git:git://github.com/${Maven.GITHUB_REPOSITORY}.git"
+            developerConnection = "scm:git:ssh://git@github.com/${Maven.GITHUB_REPOSITORY}.git"
+        }
+    }
 }
 
 detekt {
