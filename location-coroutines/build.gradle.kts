@@ -6,6 +6,7 @@ plugins {
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlinx.kover)
     alias(libs.plugins.dokka)
+    alias(libs.plugins.dokka.javadoc)
     alias(libs.plugins.detekt)
     id("signing")
     id("maven-publish")
@@ -122,93 +123,80 @@ dependencies {
     androidTestImplementation(libs.truth)
 }
 
-val customDokkaTask by tasks.creating(DokkaTask::class) {
-    dokkaSourceSets.getByName("main") {
-        noAndroidSdkLink.set(false)
-    }
-    dependencies {
-        plugins(libs.dokka.javadoc.plugin)
-    }
-    inputs.dir("src/main/java")
-    outputDirectory.set(layout.buildDirectory.dir("javadoc"))
+val dokkaJavadocJar by tasks.registering(Jar::class) {
+    description = "A Javadoc JAR containing Dokka Javadoc"
+    from(tasks.dokkaGeneratePublicationJavadoc.flatMap { it.outputDirectory })
+    archiveClassifier = "javadoc"
 }
 
-val javadocJar by tasks.creating(Jar::class) {
-    dependsOn(customDokkaTask)
-    group = JavaBasePlugin.DOCUMENTATION_GROUP
-    description = "Assembles JavaDoc JAR"
-    archiveClassifier.set("javadoc")
-    from(customDokkaTask.outputDirectory)
-}
+publishing {
+    publications {
+        register<MavenPublication>("maven") {
+            afterEvaluate {
+                from(components.named("release").get())
+            }
 
-afterEvaluate {
-    publishing {
-        publications {
-            create<MavenPublication>("maven") {
-                from(components["release"])
+            groupId = Maven.GROUP_ID
+            artifactId = Maven.ARTIFACT_ID
 
-                groupId = Maven.GROUP_ID
-                artifactId = Maven.ARTIFACT_ID
+            println("""
+                |Creating maven publication
+                |    Group: $groupId
+                |    Artifact: $artifactId
+                |    Version: $version
+            """.trimMargin())
 
-                println("""
-                    |Creating maven publication
-                    |    Group: $groupId
-                    |    Artifact: $artifactId
-                    |    Version: $version
-                """.trimMargin())
+            artifact(dokkaJavadocJar)
 
-                artifact(javadocJar)
+            pom {
+                name.set(Maven.NAME)
+                description.set(Maven.DESC)
+                url.set(Maven.SITE_URL)
 
-                pom {
-                    name.set(Maven.NAME)
-                    description.set(Maven.DESC)
-                    url.set(Maven.SITE_URL)
+                scm {
+                    val scmUrl = "scm:git:${Maven.GIT_URL}"
+                    connection = scmUrl
+                    developerConnection = scmUrl
+                    url = Maven.GIT_URL
+                    tag = "HEAD"
+                }
 
-                    scm {
-                        val scmUrl = "scm:git:${Maven.GIT_URL}"
-                        connection.set(scmUrl)
-                        developerConnection.set(scmUrl)
-                        url.set(Maven.GIT_URL)
-                        tag.set("HEAD")
+                developers {
+                    developer {
+                        id = "crow-misia"
+                        name = "Zenichi Amano"
+                        email = "crow.misia@gmail.com"
+                        roles = listOf("Project-Administrator", "Developer")
+                        timezone = "+9"
                     }
+                }
 
-                    developers {
-                        developer {
-                            id.set("crow-misia")
-                            name.set("Zenichi Amano")
-                            email.set("crow.misia@gmail.com")
-                            roles.set(listOf("Project-Administrator", "Developer"))
-                            timezone.set("+9")
-                        }
-                    }
-
-                    licenses {
-                        license {
-                            name.set(Maven.LICENSE_NAME)
-                            url.set(Maven.LICENSE_URL)
-                            distribution.set(Maven.LICENSE_DIST)
-                        }
+                licenses {
+                    license {
+                        name = Maven.LICENSE_NAME
+                        url = Maven.LICENSE_URL
+                        distribution = Maven.LICENSE_DIST
                     }
                 }
             }
         }
-        repositories {
-            maven {
-                val releasesRepoUrl = uri("https://oss.sonatype.org/service/local/staging/deploy/maven2")
-                val snapshotsRepoUrl = uri("https://oss.sonatype.org/content/repositories/snapshots")
-                url = if (Maven.VERSION.endsWith("SNAPSHOT")) snapshotsRepoUrl else releasesRepoUrl
-                credentials {
-                    username = project.findProperty("sona.user") as String? ?: providers.environmentVariable("SONA_USER").orNull
-                    password = project.findProperty("sona.password") as String? ?: providers.environmentVariable("SONA_PASSWORD").orNull
-                }
+    }
+    repositories {
+        maven {
+            val releasesRepoUrl = uri("https://oss.sonatype.org/service/local/staging/deploy/maven2")
+            val snapshotsRepoUrl = uri("https://oss.sonatype.org/content/repositories/snapshots")
+            url = if (Maven.VERSION.endsWith("SNAPSHOT")) snapshotsRepoUrl else releasesRepoUrl
+            credentials {
+                username = project.findProperty("sona.user") as String? ?: providers.environmentVariable("SONA_USER").orNull
+                password = project.findProperty("sona.password") as String? ?: providers.environmentVariable("SONA_PASSWORD").orNull
             }
         }
     }
+}
 
-    signing {
-        useGpgCmd()
-        sign(publishing.publications.getByName("maven"))
-    }
+signing {
+    useGpgCmd()
+    sign(publishing.publications)
 }
 
 detekt {
@@ -216,5 +204,5 @@ detekt {
     buildUponDefaultConfig = true
     allRules = false
     autoCorrect = true
-    config.setFrom(files("$rootDir/config/detekt.yml"))
+    config.from(rootDir.resolve("config/detekt.yml"))
 }
