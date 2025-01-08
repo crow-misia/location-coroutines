@@ -7,13 +7,13 @@ plugins {
 }
 
 android {
-    compileSdk = 35
+    compileSdk = Build.COMPILE_SDK
 
     defaultConfig {
         namespace = "com.example.sample"
         applicationId = "com.example.sample"
         minSdk = 23
-        targetSdk = 35
+        targetSdk = Build.TARGET_SDK
         versionCode = 1
         versionName = "1.0"
 
@@ -28,8 +28,8 @@ android {
     }
 
     compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_1_8
-        targetCompatibility = JavaVersion.VERSION_1_8
+        sourceCompatibility = Build.sourceCompatibility
+        targetCompatibility = Build.targetCompatibility
     }
 
     buildFeatures {
@@ -52,8 +52,8 @@ android {
 
 kotlin {
     compilerOptions {
-        javaParameters.set(true)
-        jvmTarget.set(JvmTarget.JVM_1_8)
+        javaParameters = true
+        jvmTarget = JvmTarget.JVM_1_8
     }
 }
 
