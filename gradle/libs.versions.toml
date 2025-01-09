@@ -22,7 +22,7 @@ maven-publish = { id = "com.vanniktech.maven.publish", version.ref = "maven-publ
 
 [versions]
 
-android-gradle-plugin = "8.7.3"
+android-gradle-plugin = "8.8.0"
 
 androidx-activity = "1.9.3"
 
