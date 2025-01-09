@@ -1,8 +1,8 @@
 # location-coroutine
 
-[![Android CI](https://github.com/crow-misia/location-coroutines/actions/workflows/android.yml/badge.svg?branch=main)](https://github.com/crow-misia/location-coroutines/actions/workflows/android.yml)
-[![Maven Central](https://img.shields.io/maven-central/v/io.github.crow-misia.location-coroutines/location-coroutines.svg?label=Maven%20Central)](https://search.maven.org/search?q=g:%22io.github.crow-misia.location-coroutines%22%20AND%20a:%22location-coroutines%22)
-[![License](https://img.shields.io/github/license/crow-misia/location-coroutines)](LICENSE)
+[![GitHub Actions Workflow Status](https://img.shields.io/github/actions/workflow/status/crow-misia/location-coroutines/android.yml)](https://github.com/crow-misia/location-coroutines/actions/workflows/android.yml)
+[![Maven Central Version](https://img.shields.io/maven-central/v/io.github.crow-misia.location-coroutines/location-coroutines)](https://central.sonatype.com/artifact/io.github.crow-misia.location-coroutines/location-coroutines)
+[![GitHub License](https://img.shields.io/github/license/crow-misia/location-coroutines)](LICENSE)
 
 Coroutines Function for FusedLocationProviderClient.
 
@@ -12,7 +12,7 @@ Coroutines Function for FusedLocationProviderClient.
 
 Add dependencies (you can also add other modules that you need):
 
-`${latest.version}` is [![Download](https://img.shields.io/maven-central/v/io.github.crow-misia.location-coroutines/location-coroutines.svg?label=Maven%20Central)](https://search.maven.org/search?q=g:%22io.github.crow-misia.location-coroutines%22%20AND%20a:%22location-coroutines%22)
+`${latest.version}` is [![Maven Central Version](https://img.shields.io/maven-central/v/io.github.crow-misia.location-coroutines/location-coroutines)](https://central.sonatype.com/artifact/io.github.crow-misia.location-coroutines/location-coroutines)
 
 ```groovy
 dependencies {
