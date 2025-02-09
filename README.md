@@ -1,6 +1,6 @@
 # location-coroutine
 
-[![GitHub Actions Workflow Status](https://img.shields.io/github/actions/workflow/status/crow-misia/location-coroutines/android.yml)](https://github.com/crow-misia/location-coroutines/actions/workflows/android.yml)
+[![GitHub Actions Workflow Status](https://img.shields.io/github/actions/workflow/status/crow-misia/location-coroutines/build.yml)](https://github.com/crow-misia/location-coroutines/actions/workflows/build.yml)
 [![Maven Central Version](https://img.shields.io/maven-central/v/io.github.crow-misia.location-coroutines/location-coroutines)](https://central.sonatype.com/artifact/io.github.crow-misia.location-coroutines/location-coroutines)
 [![GitHub License](https://img.shields.io/github/license/crow-misia/location-coroutines)](LICENSE)
 
