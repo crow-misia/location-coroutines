@@ -1,7 +1,7 @@
 object Maven {
     const val GROUP_ID = "io.github.crow-misia.location-coroutines"
     const val ARTIFACT_ID = "location-coroutines"
-    const val VERSION = "0.28.0"
+    const val VERSION = "0.29.0"
     const val DESCRIPTION = "Coroutines function for FusesLocationProviderClient"
     const val GITHUB_REPOSITORY = "crow-misia/location-coroutines"
     const val LICENSE_NAME = "Apache-2.0"
