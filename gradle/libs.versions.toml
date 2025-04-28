@@ -30,7 +30,7 @@ detekt = "1.23.8"
 
 dokka = "2.0.0"
 
-google-accompanist = "0.37.2"
+google-accompanist = "0.37.3"
 
 kotest = "5.9.1"
 
