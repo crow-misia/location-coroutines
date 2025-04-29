@@ -42,7 +42,7 @@ kotlinx-kover = "0.9.1"
 
 maven-publish = "0.31.0"
 
-mockk = "1.14.0"
+mockk = "1.14.2"
 
 timber = "5.0.1"
 
