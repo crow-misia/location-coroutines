@@ -58,8 +58,8 @@ android {
     }
 
     compileOptions {
-        sourceCompatibility = Build.sourceCompatibility
-        targetCompatibility = Build.targetCompatibility
+        sourceCompatibility = Build.jvmTarget
+        targetCompatibility = Build.jvmTarget
     }
 
     packaging {
@@ -73,7 +73,7 @@ android {
 kotlin {
     compilerOptions {
         javaParameters = true
-        jvmTarget = JvmTarget.JVM_1_8
+        jvmTarget = JvmTarget.fromTarget(Build.jvmTarget.toString())
     }
 }
 
