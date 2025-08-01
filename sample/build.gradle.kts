@@ -48,6 +48,20 @@ android {
         checkDependencies = true
         baseline = file("lint-baseline.xml")
     }
+
+    testOptions {
+        unitTests {
+            isIncludeAndroidResources = true
+        }
+        unitTests.all {
+            it.useJUnitPlatform()
+            it.testLogging {
+                showStandardStreams = true
+                events("passed", "skipped", "failed")
+            }
+            it.failOnNoDiscoveredTests = false
+        }
+    }
 }
 
 kotlin {
