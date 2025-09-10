@@ -34,7 +34,7 @@ google-accompanist = "0.37.3"
 
 kotest = "6.0.3"
 
-kotlin = "2.2.10"
+kotlin = "2.2.20"
 
 kotlinx-coroutines = "1.10.2"
 
