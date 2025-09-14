@@ -8,7 +8,8 @@ updates:
           - "*"
     schedule:
       interval: "daily"
-
+    cooldown:
+      default-days: 7
   - package-ecosystem: "gradle"
     directory: "/"
     registries:
@@ -28,7 +29,8 @@ updates:
           - "androidx.compose.compiler*"
     schedule:
       interval: "daily"
-
+    cooldown:
+      default-days: 7
   - package-ecosystem: "npm"
     directory: "/"
     groups:
@@ -37,6 +39,8 @@ updates:
           - "*"
     schedule:
       interval: "daily"
+    cooldown:
+      default-days: 7
 
 registries:
   maven-google:
