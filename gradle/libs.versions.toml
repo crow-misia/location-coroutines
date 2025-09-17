@@ -12,7 +12,7 @@ androidx-compose-bom = "2025.09.00"
 
 androidx-core = "1.17.0"
 
-androidx-lifecycle = "2.9.3"
+androidx-lifecycle = "2.9.4"
 
 androidx-navigation = "2.9.4"
 
