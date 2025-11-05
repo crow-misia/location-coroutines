@@ -8,13 +8,13 @@ androidx-activity = "1.11.0"
 
 androidx-appcompat = "1.7.1"
 
-androidx-compose-bom = "2025.10.01"
+androidx-compose-bom = "2025.11.00"
 
 androidx-core = "1.17.0"
 
 androidx-lifecycle = "2.9.4"
 
-androidx-navigation = "2.9.5"
+androidx-navigation = "2.9.6"
 
 androidx-test-espresso = "3.7.0"
 
