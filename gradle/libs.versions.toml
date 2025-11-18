@@ -40,7 +40,7 @@ kotlinx-coroutines = "1.10.2"
 
 kotlinx-kover = "0.9.3"
 
-maven-publish = "0.34.0"
+maven-publish = "0.35.0"
 
 mockk = "1.14.6"
 
