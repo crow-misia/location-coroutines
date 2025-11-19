@@ -4,15 +4,15 @@
 
 android-gradle-plugin = "8.13.1"
 
-androidx-activity = "1.11.0"
+androidx-activity = "1.12.0"
 
 androidx-appcompat = "1.7.1"
 
-androidx-compose-bom = "2025.11.00"
+androidx-compose-bom = "2025.11.01"
 
 androidx-core = "1.17.0"
 
-androidx-lifecycle = "2.9.4"
+androidx-lifecycle = "2.10.0"
 
 androidx-navigation = "2.9.6"
 
