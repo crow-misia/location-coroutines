@@ -4,11 +4,11 @@
 
 android-gradle-plugin = "8.13.1"
 
-androidx-activity = "1.12.0"
+androidx-activity = "1.12.1"
 
 androidx-appcompat = "1.7.1"
 
-androidx-compose-bom = "2025.11.01"
+androidx-compose-bom = "2025.12.00"
 
 androidx-core = "1.17.0"
 
