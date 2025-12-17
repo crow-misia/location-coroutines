@@ -16,4 +16,4 @@ jobs:
 
     steps:
       - name: Assign author to PR
-        uses: toshimaru/auto-author-assign@7e15cd70c245ad136377c3fab3479815df10d844 # v2.1.1
+        uses: toshimaru/auto-author-assign@e1f5499be4c5328a8ccbd4cad73be7680a0de892 # v2.1.1
