@@ -8,7 +8,7 @@ androidx-activity = "1.12.2"
 
 androidx-appcompat = "1.7.1"
 
-androidx-compose-bom = "2025.12.01"
+androidx-compose-bom = "2026.01.00"
 
 androidx-core = "1.17.0"
 
