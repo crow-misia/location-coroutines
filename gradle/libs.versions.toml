@@ -8,13 +8,13 @@ androidx-activity = "1.12.2"
 
 androidx-appcompat = "1.7.1"
 
-androidx-compose-bom = "2026.01.00"
+androidx-compose-bom = "2026.01.01"
 
 androidx-core = "1.17.0"
 
 androidx-lifecycle = "2.10.0"
 
-androidx-navigation = "2.9.6"
+androidx-navigation = "2.9.7"
 
 androidx-test-espresso = "3.7.0"
 
@@ -38,7 +38,7 @@ kotlin = "2.3.0"
 
 kotlinx-coroutines = "1.10.2"
 
-kotlinx-kover = "0.9.4"
+kotlinx-kover = "0.9.5"
 
 maven-publish = "0.36.0"
 
