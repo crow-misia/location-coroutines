@@ -5,23 +5,23 @@ on:
   push:
     branches: ['main']
     paths:
-      - "config/**"
-      - "gradle/**"
-      - "location-coroutines/**"
-      - "*.gradle.kts"
-      - "gradle.properties"
-      - "lint.xml"
+      - 'config/**'
+      - 'gradle/**'
+      - 'location-coroutines/**'
+      - '*.gradle.kts'
+      - 'gradle.properties'
+      - 'lint.xml'
   pull_request:
     paths:
-      - "config/**"
-      - "gradle/**"
-      - "location-coroutines/**"
-      - "*.gradle.kts"
-      - "gradle.properties"
-      - "lint.xml"
+      - 'config/**'
+      - 'gradle/**'
+      - 'location-coroutines/**'
+      - '*.gradle.kts'
+      - 'gradle.properties'
+      - 'lint.xml'
 
 permissions:
-  contents: read
+  contents: write
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
@@ -49,8 +49,10 @@ jobs:
           distribution: temurin
           java-version: ${{ matrix.java-version }}
 
-      - name: Setup Gradle
+      - name: Setup Gradle to generate and submit dependency graphs
         uses: gradle/actions/setup-gradle@f29f5a9d7b09a7c6b29859002d29d24e1674c884 # v5.0.1
+        with:
+          dependency-graph: generate-and-submit
 
       - name: Build with Gradle
         run: ./gradlew build
