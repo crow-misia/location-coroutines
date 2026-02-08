@@ -12,27 +12,7 @@ updates:
       default-days: 7
   - package-ecosystem: "gradle"
     directory: "/"
-    registries:
-      - maven-google
-    groups:
-      all:
-        patterns:
-          - "*"
-        exclude-patterns:
-          - "org.jetbrains.kotlin:*"
-          - "org.jetbrains.kotlin.*"
-          - "androidx.compose.compiler*"
-      kotlin:
-        patterns:
-          - "org.jetbrains.kotlin:*"
-          - "org.jetbrains.kotlin.*"
-          - "androidx.compose.compiler*"
-    schedule:
-      interval: "weekly"
-    cooldown:
-      default-days: 7
-  - package-ecosystem: "npm"
-    directory: "/"
+    registries: "*"
     groups:
       all:
         patterns:
