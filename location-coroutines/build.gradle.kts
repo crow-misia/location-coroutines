@@ -8,7 +8,6 @@ plugins {
     alias(libs.plugins.dokka)
     alias(libs.plugins.dokka.javadoc)
     alias(libs.plugins.detekt)
-    alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlinx.kover)
     alias(libs.plugins.maven.publish)
     id("signing")
