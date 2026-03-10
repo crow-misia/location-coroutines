@@ -45,19 +45,6 @@ android {
         }
     }
 
-    // Tests can be Robolectric or instrumented tests
-    sourceSets {
-        val sharedTestDir = "src/sharedTest/java"
-        named("test") {
-            java.srcDir(sharedTestDir)
-            kotlin.srcDir(sharedTestDir)
-        }
-        named("androidTest") {
-            java.srcDir(sharedTestDir)
-            kotlin.srcDir(sharedTestDir)
-        }
-    }
-
     compileOptions {
         sourceCompatibility = Build.jvmTarget
         targetCompatibility = Build.jvmTarget
