@@ -19,8 +19,6 @@ updates:
           - "*"
     schedule:
       interval: "weekly"
-    cooldown:
-      default-days: 7
 
 registries:
   maven-google:

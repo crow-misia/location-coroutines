@@ -2,13 +2,13 @@
 
 [versions]
 
-android-gradle-plugin = "8.13.2"
+android-gradle-plugin = "9.1.0"
 
-androidx-activity = "1.12.2"
+androidx-activity = "1.12.4"
 
 androidx-appcompat = "1.7.1"
 
-androidx-compose-bom = "2026.02.00"
+androidx-compose-bom = "2026.02.01"
 
 androidx-core = "1.17.0"
 
@@ -28,11 +28,11 @@ androidx-test-runner = "1.7.0"
 
 detekt = "1.23.8"
 
-dokka = "2.1.0"
+dokka = "2.2.0-Beta"
 
 google-accompanist = "0.37.3"
 
-kotest = "6.1.3"
+kotest = "6.1.5"
 
 kotlin = "2.3.10"
 
@@ -135,8 +135,6 @@ detekt = { id = "io.gitlab.arturbosch.detekt", version.ref = "detekt" }
 dokka = { id = "org.jetbrains.dokka", version.ref = "dokka" }
 
 dokka-javadoc = { id = "org.jetbrains.dokka-javadoc", version.ref = "dokka" }
-
-kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
 
 kotlin-plugin-compose = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
 
