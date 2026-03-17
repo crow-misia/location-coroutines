@@ -4,13 +4,13 @@
 
 android-gradle-plugin = "9.1.0"
 
-androidx-activity = "1.12.4"
+androidx-activity = "1.13.0"
 
 androidx-appcompat = "1.7.1"
 
-androidx-compose-bom = "2026.02.01"
+androidx-compose-bom = "2026.03.00"
 
-androidx-core = "1.17.0"
+androidx-core = "1.18.0"
 
 androidx-lifecycle = "2.10.0"
 
@@ -32,9 +32,9 @@ dokka = "2.2.0-Beta"
 
 google-accompanist = "0.37.3"
 
-kotest = "6.1.6"
+kotest = "6.1.7"
 
-kotlin = "2.3.10"
+kotlin = "2.3.20"
 
 kotlinx-coroutines = "1.10.2"
 
