@@ -2,7 +2,7 @@
 
 [versions]
 
-android-gradle-plugin = "9.1.1"
+android-gradle-plugin = "9.2.0"
 
 androidx-activity = "1.13.0"
 
