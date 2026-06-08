@@ -7,7 +7,7 @@ updates:
         patterns:
           - "*"
     schedule:
-      interval: "weekly"
+      interval: "monthly"
     cooldown:
       default-days: 7
   - package-ecosystem: "gradle"
@@ -18,7 +18,7 @@ updates:
         patterns:
           - "*"
     schedule:
-      interval: "weekly"
+      interval: "monthly"
 
 registries:
   maven-google:

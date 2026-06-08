@@ -8,3 +8,9 @@ plugins {
     alias(libs.plugins.kotlinx.kover) apply false
     alias(libs.plugins.maven.publish) apply false
 }
+
+buildscript {
+    dependencies {
+        classpath(libs.kotlin.gradle.plugin)
+    }
+}
