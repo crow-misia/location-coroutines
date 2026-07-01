@@ -8,11 +8,11 @@ androidx-activity = "1.13.0"
 
 androidx-appcompat = "1.7.1"
 
-androidx-compose-bom = "2026.05.01"
+androidx-compose-bom = "2026.06.01"
 
 androidx-core = "1.19.0"
 
-androidx-lifecycle = "2.10.0"
+androidx-lifecycle = "2.11.0"
 
 androidx-navigation = "2.9.8"
 
@@ -32,7 +32,7 @@ dokka = "2.2.0"
 
 google-accompanist = "0.37.3"
 
-kotest = "6.1.11"
+kotest = "6.2.1"
 
 kotlin = "2.4.0"
 
@@ -40,7 +40,7 @@ kotlinx-coroutines = "1.11.0"
 
 kotlinx-kover = "0.9.8"
 
-maven-publish = "0.36.0"
+maven-publish = "0.37.0"
 
 mockk = "1.14.11"
 
@@ -94,7 +94,7 @@ androidx-test-runner = { group = "androidx.test", name = "runner", version.ref =
 
 google-accompanist-permissions = { group = "com.google.accompanist", name = "accompanist-permissions", version.ref = "google-accompanist" }
 
-google-playservices-location = { group = "com.google.android.gms", name = "play-services-location", version = "21.3.0" }
+google-playservices-location = { group = "com.google.android.gms", name = "play-services-location", version = "21.4.0" }
 
 kotest-bom = { group = "io.kotest", name = "kotest-bom", version.ref = "kotest" }
 
