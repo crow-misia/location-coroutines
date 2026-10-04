@@ -2,19 +2,19 @@
 
 [versions]
 
-android-gradle-plugin = "9.4.0"
+android-gradle-plugin = "9.4.1"
 
 androidx-activity = "1.13.0"
 
 androidx-appcompat = "1.8.0"
 
-androidx-compose-bom = "2026.08.00"
+androidx-compose-bom = "2026.09.00"
 
-androidx-core = "1.19.0"
+androidx-core = "1.19.1"
 
 androidx-lifecycle = "2.11.0"
 
-androidx-navigation = "2.10.0"
+androidx-navigation = "2.10.2"
 
 androidx-test-espresso = "3.7.0"
 
@@ -32,13 +32,13 @@ dokka = "2.2.0"
 
 google-accompanist = "0.37.3"
 
-kotest = "6.2.4"
+kotest = "6.2.5"
 
 kotlin = "2.4.20"
 
 kotlinx-coroutines = "1.11.0"
 
-kotlinx-kover = "0.9.9"
+kotlinx-kover = "0.9.10"
 
 maven-publish = "0.37.0"
 
